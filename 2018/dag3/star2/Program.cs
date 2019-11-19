@@ -15,7 +15,6 @@ namespace star2
             {
                 bool overlap = false;
                 for (int i = claim.FLeft; i < claim.FLeft + claim.Width; i++)
-                {
                     for (int c = claim.FTop; c < claim.FTop + claim.Height; c++)
                     {
                         if(fabric[i,c] != 0)
@@ -26,11 +25,9 @@ namespace star2
                         }
                         fabric[i,c] = claim.ID;
                     }
-                }
+                
                 if(!overlap)
-                {
                     noOwerlaps.Add(claim.ID);
-                }
             }
             noOwerlaps.ForEach(t => Console.WriteLine(t));
         }
