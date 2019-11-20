@@ -11,21 +11,86 @@ namespace star1
         {
             var records = new List<Record>();
             foreach (var line in File.ReadAllLines("input.txt"))
-            {
                 records.Add(new Record(line));
+            var orderdRecords = records.OrderBy(t => t.Date).ToList();
+
+            List<Guard> guards = new List<Guard>();
+
+            Guard currentGuard = null;
+            for (int i = 0; i < orderdRecords.Count; i++)
+            {
+                var record = orderdRecords[i];
+                if(record.Line.IndexOf("Guard") > -1)
+                {
+                    var newGuard = new Guard(record.Line);
+                    if(guards.Any(t => t.ID == newGuard.ID))
+                    {
+                        currentGuard = guards.Single(t => t.ID == newGuard.ID);
+                    }
+                    else
+                    {
+                        currentGuard = newGuard;
+                        guards.Add(currentGuard);
+                    }
+                }
+                else
+                {
+                    var sleep = orderdRecords[i].Line;
+                    var awake = orderdRecords[i+1].Line;
+                    int startSleep = int.Parse(sleep.Substring(15, 2));
+                    int endSleep = int.Parse(awake.Substring(15, 2));
+
+                    currentGuard.TotalSleepTime += endSleep - startSleep;
+
+                    for (int c = startSleep; c < endSleep; c++)
+                    {
+                        currentGuard.Sleep[c]++;
+                    }
+                    i++; //Jump two!!!
+                }   
             }
 
-            records.OrderBy(t => t.Time).ToList().ForEach(t => Console.WriteLine(t.Time));
+            int max = 0;
+            Guard maxSleepingGuard = null;
+            foreach (var guard in guards)
+            {
+                if(guard.TotalSleepTime > max)
+                {
+                    max = guard.TotalSleepTime;
+                    maxSleepingGuard = guard;
+                }
+            }
+
+            var sleepMinute = maxSleepingGuard.Sleep.ToList().IndexOf(maxSleepingGuard.Sleep.Max());
+
+            Console.WriteLine($"Id: {maxSleepingGuard.ID} sleeps: {sleepMinute} id * sleep = {maxSleepingGuard.ID * sleepMinute}");
+            
         }
     }
 
     internal class Record
     {
-        public DateTime Time { get; set; }
-
-        public Record(string s)
+        public DateTime Date { get; set; }
+        public string Line { get; set; }
+        public Record(string line)
         {
-            Time = DateTime.Parse($"{s.Split(" ")[0].Trim('[')} {s.Split(" ")[1].Trim(']')}");
+            var split = line.Split(" ");
+            Date = DateTime.Parse(split[0].TrimStart('[') +" "+ split[1].TrimEnd(']'));
+            Line = line;
+        }
+    }
+
+    internal class Guard
+    {
+        public int ID { get; set; }
+        
+        public int[] Sleep { get; set; }
+        public int TotalSleepTime { get; set; }
+
+        public Guard(string guard)
+        {
+            ID = int.Parse(guard.Split(" ")[3].Trim('#'));
+            Sleep = new int[60];
         }
     }
 }
