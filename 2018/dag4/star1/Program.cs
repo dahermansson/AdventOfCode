@@ -61,10 +61,22 @@ namespace star1
                 }
             }
 
+            Guard mostFrequentSleepingGuard = null;
+            int freq = 0;
+            foreach (var guard in guards)
+            {
+                if(guard.Sleep.Max() > freq)
+                {
+                    freq = guard.Sleep.Max();
+                    mostFrequentSleepingGuard = guard;
+                }
+            }
+
             var sleepMinute = maxSleepingGuard.Sleep.ToList().IndexOf(maxSleepingGuard.Sleep.Max());
+            var freqSleepMinute = mostFrequentSleepingGuard.Sleep.ToList().IndexOf(freq);
 
             Console.WriteLine($"Id: {maxSleepingGuard.ID} sleeps: {sleepMinute} id * sleep = {maxSleepingGuard.ID * sleepMinute}");
-            
+            Console.WriteLine($"Id: {mostFrequentSleepingGuard.ID} sleeps: {freqSleepMinute} id * sleep = {mostFrequentSleepingGuard.ID * freqSleepMinute}");
         }
     }
 
@@ -83,10 +95,8 @@ namespace star1
     internal class Guard
     {
         public int ID { get; set; }
-        
         public int[] Sleep { get; set; }
         public int TotalSleepTime { get; set; }
-
         public Guard(string guard)
         {
             ID = int.Parse(guard.Split(" ")[3].Trim('#'));
