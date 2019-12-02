@@ -18,7 +18,7 @@ namespace star2
                 input = input.Replace(((char)c).ToString(), "").Replace(((char)(c + 32)).ToString(), "");;
                 bool thingsRemoved = false;
                 do 
-                {
+                {§
                     thingsRemoved = false;
                     for (int i = 0; i < input.Length-1; i++)
                     {
