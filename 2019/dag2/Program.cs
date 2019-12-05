@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-
+using AdventOfCode2019;
 namespace dag2
 {
     class Program
@@ -26,42 +26,29 @@ namespace dag2
                     noun = 0;
                     verb++;
                 }
-                var intcode = File.ReadAllText("input.txt").Split(',').Select(t => int.Parse(t)).ToArray();
-                intcode[1] = noun;
-                intcode[2] = verb;
+                var intcoder = new Intcoder(File.ReadAllText("input.txt"));
+                intcoder.Init(1, noun);
+                intcoder.Init(2, verb);
                 int exec = 0;
-                while (Exec(intcode, exec, intcode[exec+1], intcode[exec+2], intcode[exec+3]) == 0)
-                {
-                    exec+=4;
-                }
-                result = intcode[0];
+                do
+                    exec = intcoder.Exec(exec);
+                while (exec != -1);
+                result = intcoder.PositionZero;
             }
             Console.WriteLine($"Star 2: {100 * noun + verb}");
         }
 
         static void Star1()
         {
-            var intcode = File.ReadAllText("input.txt").Split(',').Select(t => int.Parse(t)).ToArray();
-            intcode[1] = 12;
-            intcode[2] = 2;
+            var intcoder = new Intcoder(File.ReadAllText("input.txt"));
+            intcoder.Init(1, 12);
+            intcoder.Init(2, 2);
             int exec = 0;
-            while (Exec(intcode, exec, intcode[exec+1], intcode[exec+2], intcode[exec+3]) == 0)
-            {
-                exec+=4;
-            }
-            Console.WriteLine($"Star 1: {intcode[0]}");
-        }
+            do
+                exec = intcoder.Exec(exec);
+            while (exec != -1);
+            Console.WriteLine($"Star 1: {intcoder.PositionZero}");
 
-        static int Exec(int[] intcode, int instruction, int param1, int param2, int output)
-        {
-            if(intcode[instruction] == 1)
-                intcode[output] = intcode[param1] + intcode[param2];
-            if(intcode[instruction] == 2)
-                intcode[output] = intcode[param1] * intcode[param2];
-            if(intcode[instruction] == 99)
-                return -1;
-            return 0;
         }
-
     }
 }
