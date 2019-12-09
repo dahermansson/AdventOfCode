@@ -16,15 +16,10 @@ namespace dag6
         {
             var map = new List<Obj>();
             foreach (var line in File.ReadAllLines("input.txt"))
-            {
-                var name = line.Split(')')[1];
-                var directOrbit = line.Split(')')[0];
-                map.Add(new Obj(name, directOrbit));
-            }
+                map.Add(new Obj(line.Split(')')[1], line.Split(')')[0]));
 
             var start = map.First(t => t.Name == "YOU").DirectOrbit;
             var goal = map.First(t => t.Name == "SAN").DirectOrbit;
-
             FindSanta(map, start, goal);
         }
 
@@ -48,41 +43,24 @@ namespace dag6
                 openSet.Remove(current);
                 foreach (var neighbour in map.Where(t => t.DirectOrbit == current.Name || t.Name == current.DirectOrbit))
                 {
-                    var currentCost = cost[current.Name] + 1;
-
+                    var currentCost = cost[current.Name]+1;
                     if(!cost.ContainsKey(neighbour.Name) || currentCost < cost[neighbour.Name])
                     {
-                        if(!cameFrom.ContainsKey(neighbour.Name))
-                            cameFrom.Add(neighbour.Name, current.Name);
-                        else
-                            cameFrom[neighbour.Name] = current.Name;
-                        if(!cost.ContainsKey(neighbour.Name))
-                            cost.Add(neighbour.Name, currentCost);
-                        else
-                            cost[neighbour.Name] = currentCost;
-
-                        if(!estCost.ContainsKey(neighbour.Name))
-                            estCost.Add(neighbour.Name, map.Count + cost[neighbour.Name]);
-                        else
-                            estCost[neighbour.Name] = map.Count + cost[neighbour.Name];
-
+                        cameFrom[neighbour.Name] = current.Name;
+                        cost[neighbour.Name] = currentCost;
+                        estCost[neighbour.Name] = map.Count + cost[neighbour.Name];
                         if(!openSet.Any(t => t.Name == neighbour.Name))
                             openSet.Add(neighbour);
                     }
                 }
             }
-
         }
 
         static void Star1()
         {
             var dLines = new List<Obj>();
             foreach (var line in File.ReadAllLines("input.txt"))
-            {
-                var obj = line.Split(')')[1];
-                var directOrbit = line.Split(')')[0];
-                dLines.Add(new Obj(obj, directOrbit));
-            }
+                dLines.Add(new Obj(line.Split(')')[1], line.Split(')')[0]));
             var stack = new Stack<Obj>();
             stack.Push(new Obj("COM", string.Empty));
 
