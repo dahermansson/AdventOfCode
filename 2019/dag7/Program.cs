@@ -32,35 +32,32 @@ namespace dag7
         static void Main(string[] args)
         {
             Star1();
-            Star2();
+            //Star2();
         }
-
 
         static void Star2()
         {
             string input = File.ReadAllText("input.txt");
-            //input = "3,31,3,32,1002,32,10,32,1001,31,-2,31,1007,31,0,33,1002,33,7,33,1,33,31,31,1,32,31,31,4,31,99,0,0,0";
             var thrusterSignals = new List<int>();
-            var settings = GetPermutations(new List<int>(){0,1,2,3,4}, 5).Select(t => new List<int>(t));
+            var settings = GetPermutations(new List<int>(){5,6,7,8,9}, 5).Select(t => new List<int>(t));
             
             foreach (var parameters in settings)
             {
-                Intcoder intcoder = new Intcoder(input);
-                intcoder.inputs.Push(0);
-                for (int i = 0; i < 5; i++)
+                var intcoders = Enumerable.Range(0, 5).Select( t => new Intcoder(input)).ToArray();
+                intcoders[0].Inputs.Enqueue(0);
+
+                for (int i = 0; i < intcoders.Length; i++)
                 {
-                    intcoder.Reset(input, false);
-                    intcoder.inputs.Push(parameters[i]);
-                    var pointer = 0;
-                    do
-                        pointer = intcoder.Exec(pointer);
-                    while (pointer != -1);
+                    if(i == 0)
+                        intcoders[i].Inputs.Enqueue(intcoders[intcoders.Length -1].Exec().Last());
+                    else
+                        intcoders[i].Inputs.Enqueue(intcoders[i +1].Exec().Last());
+                    
                 }
-                //Console.WriteLine(intcoder.inputs.Peek());
-                thrusterSignals.Add(intcoder.inputs.Peek());
+                thrusterSignals.Add(intcoders[intcoders.Length - 1].Outputs.Peek());
             }
         
-            Console.WriteLine($"Star 1: {thrusterSignals.Max()}");
+            Console.WriteLine($"Star 2: {thrusterSignals.Max()}");
         }
 
         static void Star1()
@@ -73,18 +70,15 @@ namespace dag7
             foreach (var parameters in settings)
             {
                 Intcoder intcoder = new Intcoder(input);
-                intcoder.inputs.Push(0);
+                intcoder.Inputs.Enqueue(0);
                 for (int i = 0; i < 5; i++)
                 {
                     intcoder.Reset(input, false);
-                    intcoder.inputs.Push(parameters[i]);
-                    var pointer = 0;
-                    do
-                        pointer = intcoder.Exec(pointer);
-                    while (pointer != -1);
+                    intcoder.Inputs.Enqueue(parameters[i]);
+                    intcoder.Inputs.Enqueue(intcoder.Exec().Last());
+                    
                 }
-                //Console.WriteLine(intcoder.inputs.Peek());
-                thrusterSignals.Add(intcoder.inputs.Peek());
+                thrusterSignals.Add(intcoder.Inputs.Peek());
             }
         
             Console.WriteLine($"Star 1: {thrusterSignals.Max()}");
