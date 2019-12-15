@@ -31,34 +31,61 @@ namespace dag7
 
         static void Main(string[] args)
         {
-            Star1();
-            //Star2();
+            //Star1();
+            Star2();
         }
 
         static void Star2()
         {
             string input = File.ReadAllText("input.txt");
+            //Console.WriteLine(input.Split(',').Length);
+            //input = "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5";
+            //input = @"3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10";
             var thrusterSignals = new List<int>();
             var settings = GetPermutations(new List<int>(){5,6,7,8,9}, 5).Select(t => new List<int>(t));
             
             foreach (var parameters in settings)
             {
-                var intcoders = Enumerable.Range(0, 5).Select( t => new Intcoder(input)).ToArray();
-                intcoders[0].Inputs.Enqueue(0);
-
-                for (int i = 0; i < intcoders.Length; i++)
+                var inputQueue = new Queue<int>();
+                //var parameters = new int[]{9,7,8,5,6};
+                var intcoders = Enumerable.Range(0, 5).Select( t => new Intcoder(input, t +1)).ToArray();
+                //intcoders[0].Inputs.Push(0);
+                //for (int i = 0; i < intcoders.Length; i++)
+                int activRunning = 0;
+                inputQueue.Enqueue(parameters[0]);
+                inputQueue.Enqueue(0);
+                while(intcoders.Any(i => i.Running || !i.Done))
                 {
-                    if(i == 0)
-                        intcoders[i].Inputs.Enqueue(intcoders[intcoders.Length -1].Exec().Last());
-                    else
-                        intcoders[i].Inputs.Enqueue(intcoders[i +1].Exec().Last());
+                    var outputValue = intcoders[activRunning++].Exec(inputQueue);
+                    //Console.WriteLine(outputValue);
+                    if(activRunning == 5)
+                        thrusterSignals.AddRange(outputValue);
                     
+                    if(activRunning == 5)
+                        activRunning = 0;
+
+                    if(intcoders[activRunning].Pointer == 0)
+                        inputQueue.Enqueue(parameters[activRunning]);
+                    inputQueue.Enqueue(outputValue.Single());
+                    //intcoders[i].Inputs.Push(parameters[i]);
+                    //if(i == 0)
+                        
+                    //if(i == 4)
+                    //{
+                        //intcoders[i].OutputDelegate += intcoders[0].GetInput;
+                    //}
+                    //else
+                        //intcoders[i].OutputDelegate += intcoders[i+1].GetInput;
+                    //intcoders[i].OutputDelegate += (int value, string name) => {Console.WriteLine($"{name}: {value}");};
                 }
-                thrusterSignals.Add(intcoders[intcoders.Length - 1].Outputs.Peek());
+                //intcoders[0].Exec(); 
+                //thrusterSignals.Add(intcoders[0].Inputs.Peek());
             }
         
             Console.WriteLine($"Star 2: {thrusterSignals.Max()}");
         }
+
+
 
         static void Star1()
         {
@@ -69,19 +96,24 @@ namespace dag7
             
             foreach (var parameters in settings)
             {
-                Intcoder intcoder = new Intcoder(input);
-                intcoder.Inputs.Enqueue(0);
+                //var parameters = new int[]{1,0,4,3,2};
+                Intcoder intcoder = new Intcoder(input, 0);
+                //intcoder.OutputDelegate = (int value, string name) => {intcoder.Inputs.Push(value);};
+                //intcoder.Inputs.Push(0);
+                var inputQueue = new Queue<int>();
                 for (int i = 0; i < 5; i++)
                 {
+                    inputQueue.Enqueue(parameters[0]);
+                    inputQueue.Enqueue(0);
+                        
                     intcoder.Reset(input, false);
-                    intcoder.Inputs.Enqueue(parameters[i]);
-                    intcoder.Inputs.Enqueue(intcoder.Exec().Last());
-                    
+                    intcoder.Exec(inputQueue); 
                 }
-                thrusterSignals.Add(intcoder.Inputs.Peek());
+
+                //thrusterSignals.Add(intcoder.Inputs.Last());
             }
         
-            Console.WriteLine($"Star 1: {thrusterSignals.Max()}");
+       //     Console.WriteLine($"Star 1: {thrusterSignals.Max()}");
         }
     }
 }

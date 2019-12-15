@@ -5,16 +5,34 @@ namespace AdventOfCode2019
 {
     public class Intcoder
     {
+        public bool Running { get; set; }
+        public bool Done { get; set; }
         public int Pointer { get; private set; }
         public int[] IntCode { get; set; }
-
-        public Queue<int> Inputs {get; set; }
-        public Queue<int> Outputs {get; set; }
-        public Intcoder(string intcode)
+        //public Stack<int> Inputs {get; set; }
+        //public Queue<int> InputQueue { get; set; }
+        public List<int> Outputs { get; set; }
+        public Action<int, string> OutputDelegate;
+        public string Name { get; set; }
+        public Intcoder(string intcode, int i)
         {
             IntCode = intcode.Split(',').Select(t => int.Parse(t)).ToArray();
-            Inputs = new Queue<int>();
-            Outputs = new Queue<int>();
+            //Inputs = new Stack<int>();
+            //OutputDelegate = Output;
+            //Outputs = new List<int>();
+            Name = $"Amp {i}";
+            Done = false;
+        }
+
+        private void Output(int value, string name)
+        {
+            Console.WriteLine(value);
+        }
+
+        public void GetInput(int value, string name)
+        {
+            //InputQueue.Dequeue.(value);
+            //Exec();
         }
         public void Init(int position, int value)
         {
@@ -30,14 +48,15 @@ namespace AdventOfCode2019
 
         public void Reset(string intcode, bool clearInputOutput)
         {
+            Pointer = 0;
             IntCode = intcode.Split(',').Select(t => int.Parse(t)).ToArray();
-            if(clearInputOutput)
-                Inputs.Clear();
+            //if(clearInputOutput)
+              //  Inputs.Clear();
         }
-        public IEnumerable<int> Exec()
+        public IEnumerable<int> Exec(Queue<int> inputQueue)
         {
-            bool running = true;
-            while(running)
+            Running = true;
+            while(Running && !Done)
             {
                 int optCode;
                 var instruction = IntCode[Pointer].ToString();
@@ -70,17 +89,21 @@ namespace AdventOfCode2019
                 if(optCode == 2)
                 {
                     SetParameterValue(param3, GetParamaterValue(param1, param1Mode) * GetParamaterValue(param2, param2Mode));
-                       Pointer += 4;
+                    Pointer += 4;
                 }
                 if(optCode == 3)
                 {
-                    SetParameterValue(param1, Inputs.Dequeue());
+                    SetParameterValue(param1, inputQueue.Dequeue());
                     Pointer += 2;
                 }
                 if(optCode == 4)
                 {
-                    yield return (GetParamaterValue(param1, param1Mode));
+                    var value = GetParamaterValue(param1, param1Mode);
                     Pointer += 2;
+                    //Outputs.Add(value);
+                    //OutputDelegate(value, Name);
+                    Running = false;
+                    yield return value;
                 }
                 if(optCode == 5)
                 {
@@ -113,11 +136,14 @@ namespace AdventOfCode2019
                     Pointer += 4;
                 }
                 if(optCode == 99)
-                    running = false;
+                {
+                    Running = false;
+                    Done = true;
+                }
                 if(!new int[]{1,2,3,4,5,6,7,8,99}.Any(t => t == optCode))
-                    throw new Exception();
-                
+                     throw new Exception("Invalid optCode");
             }
+            yield return 0;
         }
 
         private void SetParameterValue(int Pointer, int value)

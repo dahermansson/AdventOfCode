@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using AdventOfCode2019;
 
 namespace dag5
@@ -7,18 +8,17 @@ namespace dag5
     {
         static void Main(string[] args)
         {
-            Star(new int[]{1});
-            Star(new int[]{5});
+            Star(1);
+            Star(5);
         }
 
-        static void Star(int[] input)
+        static void Star(int input)
         {
-            var intcoder = new Intcoder(File.ReadAllText("input.txt"));
-            intcoder.inputs = input;
-            var pointer = 0;
-            do
-                pointer = intcoder.Exec(pointer);
-            while (pointer != -1);
+            var intcode = File.ReadAllText("input.txt");
+            var intcoder = new Intcoder(intcode, 1);
+            intcoder.Inputs.Push(input);
+            intcoder.OutputDelegate = (int value, string name) => {Console.WriteLine(value); };
+            intcoder.Exec();
         }
     }
 }
