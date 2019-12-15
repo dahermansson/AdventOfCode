@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Drawing;
+using AdventofCode.Utils;
 
 namespace dag8
 {
@@ -15,41 +15,38 @@ namespace dag8
         }
         private static void Star2()
         {
-            var input = File.ReadAllText("input.txt");
-            var layerSize = 25*6;
-            var layers = Enumerable.Range(0, input.Length/layerSize)
-            .Select(s => input.Substring(s * layerSize, layerSize).Select(t => (int)char.GetNumericValue(t))).Reverse().ToList();
+            int width = 25;
+            int height = 6;
+            var input = File.ReadAllText("input.txt").ToIntArray();
+            var layerSize = width*height;
+            var layers = Utils.Split(input, layerSize).Reverse();
 
-            int[,] image = new int[6,25];
-            var bitmap = new Bitmap(26, 6);
+            int[,] image = new int[height,width];
+            var bitmap = new Bitmap(width, height);
             foreach (var layer in layers)
             {
-                var rows = new List<int[]>();
-                for (int i = 0; i < 6; i++)
-                    rows.Add(layer.Skip(i*25).Take(25).ToArray());
-                
-                for (int r = 0; r < rows.Count; r++)
-                    for (int c = 0; c < rows[r].Length; c++)
+                var rows = Utils.Split(layer, width).ToArray();
+                for (int h = 0; h < rows.Length; h++)
+                    for (int w = 0; w < rows[h].Length; w++)
                     {
-                        var layerPixel = rows[r][c];
+                        var layerPixel = rows[h][w];
                         if(layerPixel == 2)
                             continue;
-                        image[r,c] = layerPixel;
+                        image[h,w] = layerPixel;
                     }
             }
             
-            for (int r = 0; r < 6; r++)
-                for (int c = 0; c < 25; c++)
-                    bitmap.SetPixel(c, r, image[r,c] == 0 ? Color.Black : Color.White);
+            for (int h = 0; h < height; h++)
+                for (int w = 0; w < width; w++)
+                    bitmap.SetPixel(w, h, image[h,w] == 0 ? Color.Black : Color.White);
             bitmap.Save("dag8Star2.png");
         }
 
         private static void Star1()
         {
-            var input = File.ReadAllText("input.txt");
+            var input = File.ReadAllText("input.txt").ToIntArray();
             var layerSize = 25*6;
-            var layers = Enumerable.Range(0, input.Length/layerSize)
-            .Select(s => input.Substring(s * layerSize, layerSize).Select(t => char.GetNumericValue(t)));
+            var layers = Utils.Split(input, layerSize);
             var fewestZeroesLayer = layers.GroupBy(t => t.Count(c => c == 0)).OrderBy(t => t.Key).First();
             Console.WriteLine($"Star 1: {fewestZeroesLayer.ElementAt(0).Count(t => t == 1) * fewestZeroesLayer.ElementAt(0).Count(t => t == 2)}");
         }
