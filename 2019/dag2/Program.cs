@@ -18,35 +18,29 @@ namespace dag2
             int result = 0;
             int noun = 0;
             int verb = 0;
+            var intcoder = new Intcoder(File.ReadAllText("input.txt"), OutputMode.OutputAndRunToEnd);
             while (target != result)
             {
-                noun++;
                 if(noun == 100)
                 {
                     noun = 0;
                     verb++;
                 }
-                var intcoder = new Intcoder(File.ReadAllText("input.txt"));
-                intcoder.Init(1, noun);
+                intcoder.Init(1, noun++);
                 intcoder.Init(2, verb);
-                int exec = 0;
-                do
-                    exec = intcoder.Exec(exec);
-                while (exec != -1);
+                intcoder.Exec();
                 result = intcoder.PositionZero;
+                intcoder.Reset();
             }
             Console.WriteLine($"Star 2: {100 * noun + verb}");
         }
 
         static void Star1()
         {
-            var intcoder = new Intcoder(File.ReadAllText("input.txt"));
+            var intcoder = new Intcoder(File.ReadAllText("input.txt"), OutputMode.OutputAndRunToEnd);
             intcoder.Init(1, 12);
             intcoder.Init(2, 2);
-            int exec = 0;
-            do
-                exec = intcoder.Exec(exec);
-            while (exec != -1);
+            intcoder.Exec();
             Console.WriteLine($"Star 1: {intcoder.PositionZero}");
 
         }
