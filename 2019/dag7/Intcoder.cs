@@ -5,145 +5,123 @@ namespace AdventOfCode2019
 {
     public class Intcoder
     {
-        public bool Running { get; set; }
-        public bool Done { get; set; }
-        public int Pointer { get; private set; }
         public int[] IntCode { get; set; }
-        //public Stack<int> Inputs {get; set; }
-        //public Queue<int> InputQueue { get; set; }
-        public List<int> Outputs { get; set; }
-        public Action<int, string> OutputDelegate;
-        public string Name { get; set; }
-        public Intcoder(string intcode, int i)
+        public int Pointer { get; private set; }
+        public bool Running { get; private set; }
+        public bool Done { get; private set; }
+        public List<int> Outputs { get; private set; }
+        public OutputMode OutputMode { get; private set; }
+        private string InputIntCode { get; set; }
+        public Intcoder(string intcode, OutputMode outputMode)
         {
-            IntCode = intcode.Split(',').Select(t => int.Parse(t)).ToArray();
-            //Inputs = new Stack<int>();
-            //OutputDelegate = Output;
-            //Outputs = new List<int>();
-            Name = $"Amp {i}";
+            InputIntCode = intcode;
+            OutputMode = outputMode;
+            IntCode = InputIntCode.Split(',').Select(t => int.Parse(t)).ToArray();
             Done = false;
-        }
-
-        private void Output(int value, string name)
-        {
-            Console.WriteLine(value);
-        }
-
-        public void GetInput(int value, string name)
-        {
-            //InputQueue.Dequeue.(value);
-            //Exec();
+            if(OutputMode == OutputMode.OutputAndRunToEnd)
+                Outputs = new List<int>();
         }
         public void Init(int position, int value)
         {
             IntCode[position] = value;
             Pointer = 0;
         }
-        public int PositionZero { 
-            get
-            {
-                return IntCode[0];
-            }
-        }
+        public int PositionZero { get { return IntCode[0];}}
 
-        public void Reset(string intcode, bool clearInputOutput)
+        public void Reset()
         {
             Pointer = 0;
-            IntCode = intcode.Split(',').Select(t => int.Parse(t)).ToArray();
-            //if(clearInputOutput)
-              //  Inputs.Clear();
+            IntCode = InputIntCode.Split(',').Select(t => int.Parse(t)).ToArray();
+            Outputs.Clear();
         }
-        public IEnumerable<int> Exec(Queue<int> inputQueue)
+        private OpCode GetOpCode(string instruction)
         {
+            return (OpCode)Enum.Parse(typeof(OpCode), instruction.Substring(instruction.Length -2, 2));
+        }
+
+        public int Exec(Queue<int> inputQueue)
+        {
+            return Exec(inputQueue, false);
+        }
+
+        public int Exec(Queue<int> inputQueue, bool reset)
+        {
+            if(reset)
+                Reset();
             Running = true;
+            Done = false;
             while(Running && !Done)
             {
-                int optCode;
-                var instruction = IntCode[Pointer].ToString();
-                
-                if(instruction.Length > 1)
-                    optCode = int.Parse(instruction.Substring(instruction.Length -2, 2));
-                else
-                    optCode = int.Parse(instruction);
-                
+                var instruction = IntCode[Pointer].ToString().PadLeft(5, '0');
+                var opCode = GetOpCode(instruction);
                 var param1 = IntCode.Length >= Pointer + 1 ? Pointer + 1 : 0;
                 var param2 = IntCode.Length >= Pointer + 2 ? Pointer + 2 : 0;
                 var param3 = IntCode.Length >= Pointer + 3 ? Pointer + 3 : 0;
                 
-                var param1Mode = 0;
-                var param2Mode = 0;
-                var param3Mode = 0;
-                if(instruction.Length > 2)
-                    param1Mode = int.Parse(instruction.Substring(instruction.Length - 3, 1));
-                if(instruction.Length > 3)
-                    param2Mode = int.Parse(instruction.Substring(instruction.Length - 4, 1));
-                if(instruction.Length > 4)
-                    param3Mode = int.Parse(instruction.Substring(instruction.Length - 5, 1));
+                var param1Mode = int.Parse(instruction.Substring(instruction.Length - 3, 1));
+                var param2Mode = int.Parse(instruction.Substring(instruction.Length - 4, 1));
+                var param3Mode = int.Parse(instruction.Substring(instruction.Length - 5, 1));
 
-                if(optCode == 1)
+                switch (opCode)
                 {
-                    SetParameterValue(param3, GetParamaterValue(param1, param1Mode) + GetParamaterValue(param2, param2Mode));
-                    Pointer += 4;
+                    case OpCode.Add:
+                        SetParameterValue(param3, GetParamaterValue(param1, param1Mode) + GetParamaterValue(param2, param2Mode));
+                        Pointer += 4;
+                        break;
+                    case OpCode.Multiply:
+                        SetParameterValue(param3, GetParamaterValue(param1, param1Mode) * GetParamaterValue(param2, param2Mode));
+                        Pointer += 4;
+                        break;
+                    case OpCode.Input:
+                        SetParameterValue(param1, inputQueue.Dequeue());
+                        Pointer += 2;
+                        break;
+                    case OpCode.Output:
+                        var value = GetParamaterValue(param1, param1Mode);
+                        Pointer += 2;
+                        if(OutputMode == OutputMode.ReturnAndHalt)
+                        {
+                            Running = false;
+                            return value;
+                        }
+                        else
+                            Outputs.Add(value);
+                        break;
+                    case OpCode.JumpTrue:
+                        if(GetParamaterValue(param1, param1Mode) != 0)
+                            Pointer = GetParamaterValue(param2, param2Mode);
+                        else
+                            Pointer += 3;
+                        break;
+                    case OpCode.JumpFalse:
+                        if(GetParamaterValue(param1, param1Mode) == 0)
+                            Pointer = GetParamaterValue(param2, param2Mode);
+                        else
+                            Pointer += 3;
+                        break;
+                    case OpCode.LessThen:
+                        if(GetParamaterValue(param1, param1Mode)< GetParamaterValue(param2, param2Mode))
+                            SetParameterValue(param3, 1);
+                        else
+                            SetParameterValue(param3, 0);
+                        Pointer += 4;
+                        break;
+                    case OpCode.Equals:
+                        if(GetParamaterValue(param1, param1Mode) == GetParamaterValue(param2, param2Mode))
+                            SetParameterValue(param3, 1);
+                        else
+                            SetParameterValue(param3, 0);
+                        Pointer += 4;
+                        break;
+                    case OpCode.Terminate:
+                        Running = false;
+                        Done = true;
+                        break;
+                    default:
+                        throw new Exception("Invalid optCode");
                 }
-
-                if(optCode == 2)
-                {
-                    SetParameterValue(param3, GetParamaterValue(param1, param1Mode) * GetParamaterValue(param2, param2Mode));
-                    Pointer += 4;
-                }
-                if(optCode == 3)
-                {
-                    SetParameterValue(param1, inputQueue.Dequeue());
-                    Pointer += 2;
-                }
-                if(optCode == 4)
-                {
-                    var value = GetParamaterValue(param1, param1Mode);
-                    Pointer += 2;
-                    //Outputs.Add(value);
-                    //OutputDelegate(value, Name);
-                    Running = false;
-                    yield return value;
-                }
-                if(optCode == 5)
-                {
-                    if(GetParamaterValue(param1, param1Mode) != 0)
-                        Pointer = GetParamaterValue(param2, param2Mode);
-                    else
-                        Pointer += 3;
-                }
-                if(optCode == 6)
-                {
-                    if(GetParamaterValue(param1, param1Mode) == 0)
-                        Pointer = GetParamaterValue(param2, param2Mode);
-                    else
-                        Pointer += 3;
-                }
-                if(optCode == 7)
-                {
-                    if(GetParamaterValue(param1, param1Mode)< GetParamaterValue(param2, param2Mode))
-                        SetParameterValue(param3, 1);
-                    else
-                        SetParameterValue(param3, 0);
-                    Pointer += 4;
-                }
-                if(optCode == 8)
-                {
-                    if(GetParamaterValue(param1, param1Mode) == GetParamaterValue(param2, param2Mode))
-                        SetParameterValue(param3, 1);
-                    else
-                        SetParameterValue(param3, 0);
-                    Pointer += 4;
-                }
-                if(optCode == 99)
-                {
-                    Running = false;
-                    Done = true;
-                }
-                if(!new int[]{1,2,3,4,5,6,7,8,99}.Any(t => t == optCode))
-                     throw new Exception("Invalid optCode");
             }
-            yield return 0;
+            return -1;
         }
 
         private void SetParameterValue(int Pointer, int value)
@@ -158,5 +136,26 @@ namespace AdventOfCode2019
             else 
                 return IntCode[Pointer];
         }
+
+        enum OpCode
+        {
+            Add = 1,
+            Multiply = 2,
+            Input = 3,
+            Output = 4, 
+            JumpTrue = 5,
+            JumpFalse = 6, 
+            LessThen = 7, 
+            Equals = 8, 
+
+            Terminate = 99
+        }
+
     }
+    public enum OutputMode
+    {
+        ReturnAndHalt,
+        OutputAndRunToEnd
+    }
+    
 }
