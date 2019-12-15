@@ -31,7 +31,7 @@ namespace dag7
 
         static void Main(string[] args)
         {
-            //Star1();
+            Star1();
             Star2();
         }
 
