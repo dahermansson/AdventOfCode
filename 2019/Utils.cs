@@ -1,7 +1,8 @@
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
-namespace AdventofCode.Utils
+namespace AdventOfCode2019
 {
     public static class Utils
     {
@@ -18,6 +19,11 @@ namespace AdventofCode.Utils
             return GetPermutations(list, length - 1)
                 .SelectMany(t => list.Where(o => !t.Contains(o)),
                 (t1, t2) => t1.Concat(new T[] { t2 }));
+        }
+
+        public static string ReadAllInput(string file)
+        {
+            return File.ReadAllText(file);
         }
     }
 

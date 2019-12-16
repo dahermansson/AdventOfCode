@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
+using System.Numerics;
 using AdventOfCode2019;
 namespace dag2
 {
@@ -15,7 +15,7 @@ namespace dag2
         static void Star2()
         {
             int target = 19690720;
-            int result = 0;
+            BigInteger result = 0;
             int noun = 0;
             int verb = 0;
             var intcoder = new Intcoder(File.ReadAllText("input.txt"), OutputMode.OutputAndRunToEnd);
