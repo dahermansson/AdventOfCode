@@ -11,8 +11,8 @@ namespace AdventofCode.Utils
             for (int c = 0; c < batches; c++)
                 yield return i.Skip(c*batchSize).Take(batchSize).ToArray();
         }
-
-        public static IEnumerable<IEnumerable<T>>GetPermutations<T>(IEnumerable<T> list, int length)
+		
+		public static IEnumerable<IEnumerable<T>>GetPermutations<T>(IEnumerable<T> list, int length)
         {
         if (length == 1) return list.Select(t => new T[] { t });
             return GetPermutations(list, length - 1)

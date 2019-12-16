@@ -32,7 +32,7 @@ namespace dag2
                 result = intcoder.PositionZero;
                 intcoder.Reset();
             }
-            Console.WriteLine($"Star 2: {100 * noun + verb}");
+            Console.WriteLine($"Star 2: {100 * (noun-1) + verb}");
         }
 
         static void Star1()

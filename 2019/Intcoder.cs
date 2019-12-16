@@ -39,6 +39,10 @@ namespace AdventOfCode2019
             return (OpCode)Enum.Parse(typeof(OpCode), instruction.Substring(instruction.Length -2, 2));
         }
 
+        public int Exec()
+        {
+            return Exec(new Queue<int>(), false);
+        }
         public int Exec(Queue<int> inputQueue)
         {
             return Exec(inputQueue, false);
@@ -137,7 +141,7 @@ namespace AdventOfCode2019
                 return IntCode[Pointer];
         }
 
-        enum OpCode
+        private enum OpCode
         {
             Add = 1,
             Multiply = 2,
@@ -147,7 +151,6 @@ namespace AdventOfCode2019
             JumpFalse = 6, 
             LessThen = 7, 
             Equals = 8, 
-
             Terminate = 99
         }
 
