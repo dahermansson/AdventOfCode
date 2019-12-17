@@ -26,7 +26,7 @@ namespace AdventOfCode2019
             return File.ReadAllText(file);
         }
 
-        private static int ManhattanDistance(int x1, int x2, int y1, int y2)
+        public static double ManhattanDistance(double x1, double x2, double y1, double y2)
         {
             return System.Math.Abs(x1 - x2) + System.Math.Abs(y1 - y2);
         }

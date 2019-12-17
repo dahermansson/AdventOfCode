@@ -19,8 +19,6 @@ namespace dag1
             Console.WriteLine($"Sum: {totalFuel}");
             fuelCount.Clear();
 
-
-
             foreach (var mass in masses)
             {
                 fuelCount.Add(int.Parse(mass)/3 -2);

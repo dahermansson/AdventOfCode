@@ -16,31 +16,8 @@ namespace dag10
 
         static void Star2(Astroid astroid)
         {
-            var astroidLines = new List<SortedList<int, Astroid>>();
-            var orderdLines = astroid.InLine.Where(t => t.Key <= Math.PI/2 && t.Key > 0).OrderByDescending(t => t.Key).Select(t => t.Value).ToList();
-            orderdLines.AddRange(
-                astroid.InLine.Where(t => t.Key >= 0 && t.Key <= Math.PI).OrderBy(t => t.Key).Select(t => t.Value).ToList()
-            );
-            orderdLines.AddRange(
-                astroid.InLine.Where(t => t.Key <= Math.PI && t.Key <= Math.PI/2).OrderByDescending(t => t.Key).Select(t => t.Value).ToList()
-            );
-            
-            //var sordetInsigthLists = 
-            foreach (var line in orderdLines)
-            {
-              //  line
-            }
-
-            int laserd = 0;
-            while (laserd < 200)
-            {
-                for (int i = 0; i < orderdLines.Count; i++)
-                {
-                    if(orderdLines[i].Any())
-                        orderdLines[i].RemoveAt(0);
-                }
-            }
-
+            var vaporized = astroid.InLine.OrderByDescending(t => t.Key).ElementAt(199).Value.First().Value;
+            Console.WriteLine($"Star 2: {vaporized.X * 100 +vaporized.Y}");            
         }
 
         static Astroid Star1()
@@ -57,10 +34,10 @@ namespace dag10
                 foreach (var b in astroids.Where(a => a.X != astroid.X || a.Y != astroid.Y))
                 {
                     var angel = astroid.Angle(b);
-                    if(astroid.InLine.ContainsKey(angel))
-                        astroid.InLine[angel].Add(b);
-                    else
-                        astroid.InLine.Add(angel, new List<Astroid>(){b});
+                    var manhattanDistance = astroid.ManhattanDistance(b);
+                    if(!astroid.InLine.ContainsKey(angel))
+                        astroid.InLine.Add(angel, new SortedList<double, Astroid>());
+                    astroid.InLine[angel].Add(manhattanDistance, b);
                 }
             }
             var mostInSight = astroids.Max(t => t.InLine.Count);
@@ -76,15 +53,23 @@ namespace dag10
         {
             X = x;
             Y = y;
-            InLine = new Dictionary<double, List<Astroid>>();
+            InLine = new Dictionary<double, SortedList<double, Astroid>>();
         }
-        public Dictionary<double, List<Astroid>> InLine { get; set; }
+        public Dictionary<double, SortedList<double, Astroid>> InLine { get; set; }
         public double X { get; set; }
         public double Y{ get; set; }
 
-        public double Angle(Astroid b)
+        public double ManhattanDistance(Astroid b)
         {
-            return Math.Atan2((this.X - b.X), (this.Y - b.Y));
+            return Utils.ManhattanDistance(this.X, b.X, this.Y, b.Y);
+        }
+
+        public double Angle(Astroid b)
+        { 
+            var x = this.X - b.X;
+            var y = this.Y - b.Y;
+            var rad = Math.Atan2(x, y);
+            return (rad > 0 ? rad : (2*Math.PI + rad)) * 360 / (2*Math.PI);
         }
     }
 
