@@ -30,7 +30,6 @@ namespace dag10
                         astroids.Add(new Astroid(c, i));
 
             foreach (var astroid in astroids)
-            {
                 foreach (var b in astroids.Where(a => a.X != astroid.X || a.Y != astroid.Y))
                 {
                     var angel = astroid.Angle(b);
@@ -39,7 +38,6 @@ namespace dag10
                         astroid.InLine.Add(angel, new SortedList<double, Astroid>());
                     astroid.InLine[angel].Add(manhattanDistance, b);
                 }
-            }
             var mostInSight = astroids.Max(t => t.InLine.Count);
             Console.WriteLine($"Star 1: {mostInSight}");
 
