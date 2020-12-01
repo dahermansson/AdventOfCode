@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>_2020</RootNamespace>
+    <RootNamespace>AoC2020</RootNamespace>
   </PropertyGroup>
 
 </Project>
