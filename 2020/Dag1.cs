@@ -1,27 +1,26 @@
-using System;
-
 namespace AoC2020
 {
     public class Dag1 : IDag
     {
-        public int Star1(string input)
+        private static int[] InputLines = InputReader.GetIntegerInputLines("dag1.txt");
+
+        public int Star1()
         {
-             var expensReport = InputReader.GetInputLines(input);
-            for (int i = 0; i < expensReport.Length; i++)
-            {
-                var current = int.Parse(expensReport[i]);
-                for (int c = 0; c < expensReport.Length; c++)
-                {
-                    if(current + int.Parse(expensReport[c]) == 2020)
-                        return current * int.Parse(expensReport[c]);
-                }
-            }
+            foreach (int i in InputLines)
+                foreach (int c in InputLines)
+                    if(i + c == 2020)
+                        return i * c;
             return -1;
         }
 
-        public int Star2(string input)
+        public int Star2()
         {
-            throw new NotImplementedException();
+            foreach (int i in InputLines)
+                foreach (int c in InputLines)
+                    foreach (int t in InputLines)
+                        if(i + c + t== 2020)
+                        return i * c * t;
+            return -1;
         }
     }
 }
