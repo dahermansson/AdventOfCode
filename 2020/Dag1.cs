@@ -19,7 +19,7 @@ namespace AoC2020
                 foreach (int c in InputLines)
                     foreach (int t in InputLines)
                         if(i + c + t== 2020)
-                        return i * c * t;
+                            return i * c * t;
             return -1;
         }
     }
