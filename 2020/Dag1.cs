@@ -2,7 +2,7 @@ namespace AoC2020
 {
     public class Dag1 : IDag
     {
-        private static int[] InputLines = InputReader.GetIntegerInputLines("dag1.txt");
+          private static int[] InputLines = InputReader.GetInputLines<int>("dag1.txt");
 
         public int Star1()
         {

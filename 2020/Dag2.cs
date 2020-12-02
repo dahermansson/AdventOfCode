@@ -5,15 +5,9 @@ namespace AoC2020
     public class Dag2 : IDag
     {
         private static string[] InputLines = InputReader.GetInputLines("dag2.txt");
-        public int Star1()
-        {
-            return InputLines.Select(t => new PolicyPassword(t.Split(' '))).Count(t => t.IsValidToSledRentalPlaceDownTheStreet());
-        }
+        public int Star1() => InputLines.Select(t => new PolicyPassword(t.Split(' '))).Count(t => t.IsValidToSledRentalPlaceDownTheStreet());
 
-        public int Star2()
-        {
-            return InputLines.Select(t => new PolicyPassword(t.Split(' '))).Count(t => t.IsValidToOfficialTobogganCorporate());
-        }
+        public int Star2() => InputLines.Select(t => new PolicyPassword(t.Split(' '))).Count(t => t.IsValidToOfficialTobogganCorporate());
 
         private class PolicyPassword
         {
