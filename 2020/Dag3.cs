@@ -7,11 +7,7 @@ namespace AoC2020
     {
         private static string[][] InputLines = InputReader.GetInputLinesMatrix("dag3.txt");
         public int Star1() => TobogganRun((1, 3));
-        public int Star2()
-        {
-            var slopes = new [] { (1,1),(1,3),(1,5),(1,7),(2,1) };
-            return DoTobogganRuns(slopes).Aggregate((prod, next) => prod * next);
-        }
+        public int Star2() => DoTobogganRuns(new [] { (1,1),(1,3),(1,5),(1,7),(2,1) }).Aggregate((prod, next) => prod * next);
 
         private IEnumerable<int> DoTobogganRuns((int x, int y)[] slopes)
         {
