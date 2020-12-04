@@ -6,6 +6,7 @@ namespace AoC2020
 {
     public static class InputReader
     {
+        public static string GetInput(string filename) => File.ReadAllText(Path.Combine("inputs", filename));
         public static string[] GetInputLines(string filename) => File.ReadAllLines(Path.Combine("inputs", filename));
         public static T[] GetInputLines<T>(string filename) => File.ReadAllLines(Path.Combine("inputs", filename)).Select( s => (T) Convert.ChangeType(s, typeof(T))).ToArray();
         public static string[][] GetInputLinesMatrix(string filename) => 
