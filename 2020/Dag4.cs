@@ -21,20 +21,16 @@ namespace AoC2020
             passport.Contains("pid");  
         }
 
-        public int Star2()
-        {
-            return Input.Split("\r\n\r\n").Where(p => Valid(p)).Count(t => new Passport(t).IsValid());
-        }
-
+        public int Star2() => Input.Split("\r\n\r\n").Where(p => Valid(p)).Count(t => new Passport(t).IsValid());
         
-
     }
 
     public class Passport
         {
             public Passport(string p)
             {
-                foreach (var s in p.Split(" "))
+                var temp = p.Replace("\r\n", " ");
+                foreach (var s in temp.Split(" "))
                 {
                     if (s.StartsWith("byr"))
                         byr = s.Remove(0, 4);
@@ -46,7 +42,7 @@ namespace AoC2020
                         hgt = s.Remove(0, 4);
                     if (s.StartsWith("hcl"))
                         hcl = s.Remove(0, 4);
-                    if (s.StartsWith("elc"))
+                    if (s.StartsWith("ecl"))
                         ecl = s.Remove(0, 4);
                     if (s.StartsWith("pid"))
                         pid = s.Remove(0, 4);
@@ -66,11 +62,11 @@ namespace AoC2020
                     return false;
                 if(iByr > 2002 || iByr < 1920)
                     return false;
-                if(!int.TryParse(byr, out int iIyr))
+                if(!int.TryParse(iyr, out int iIyr))
                     return false;
                 if(iIyr > 2020 || iIyr < 2010)
                     return false;
-                if(!int.TryParse(byr, out int iEyr))
+                if(!int.TryParse(eyr, out int iEyr))
                     return false;
                 if(iEyr > 2030 || iEyr < 2020)
                     return false;
@@ -95,7 +91,7 @@ namespace AoC2020
                 if(hcl[0] != '#')
                     return false;
                 var hclTemp = hcl.Remove(0,1);
-                if(hcl.Length != 6)
+                if(hclTemp.Length != 6)
                     return false;
 
                 string[] hclOki = new string[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"}; 
@@ -112,8 +108,14 @@ namespace AoC2020
 
                 if(pid.Length != 9)
                     return false;
-                if(int.TryParse(pid, out int Ipid))
-                    return false;
+
+                string[] pidOki = new string[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}; 
+
+                foreach (string s in pid.ToCharArray().Select(t => t.ToString()))
+                {
+                    if(!pidOki.Contains(s))
+                        return false;                    
+                }
 
                 return true;
             } 

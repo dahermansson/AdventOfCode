@@ -7,6 +7,7 @@ namespace AoC2020
     {
         private static Dictionary<int, IDag> Dagar = new Dictionary<int, IDag>();
         private static readonly int DagToRun = 4;
+        
         static void Main(string[] args)
         {
             Dagar.Add(1, new Dag1());
