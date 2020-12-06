@@ -7,24 +7,26 @@ namespace AoC2015
 
         public int Star1()
         {
-            return PackageWrapperCalculator("2x3x4".Split("x").Select(int.Parse).ToArray());
+            return InputLines.Sum(t => PackageWrapperCalculator(t.Split("x").Select(int.Parse).ToArray()));
         }
 
         private int PackageWrapperCalculator(int[] d)
         {
-            return d[0]*
+            var lw = d[0]*d[1];
+            var wh = d[1] * d[2];
+            var hl = d[2] * d[0];
+            var sides = new int[] {lw, wh, hl};
+            return 2 * lw + 2 * wh + 2 * hl + sides.Min();
+        }
+
+        private int PackageRibbonCalculator(int[] d)
+        {
+            var sides = d.OrderBy(t => t).ToArray();
+            return sides[0] + sides[0] + sides[1] + sides[1] + sides[0]* sides[1] * sides[2];
         }
         public int Star2()
         {
-            int floor = 0, index = 0;
-            while (floor >= 0)
-            {
-                if (InputLines[index++]== '(')
-                    floor++;
-                else
-                    floor--;
-            }
-            return index;
+            return InputLines.Sum(t => PackageRibbonCalculator(t.Split("x").Select(int.Parse).ToArray()));
         }
     }
 }
