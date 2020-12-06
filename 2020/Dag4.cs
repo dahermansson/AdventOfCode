@@ -8,7 +8,7 @@ namespace AoC2020
     public class Dag4 : IDag
     {
         private static string Input = InputReader.GetInput("dag4.txt");
-        public int Star1() => Input.Split("\r\n\r\n").Count(p => Valid(p));
+        public int Star1() => Input.Split(Utils.DNL).Count(p => Valid(p));
 
         private bool Valid(string passport)
         {
@@ -21,7 +21,7 @@ namespace AoC2020
             passport.Contains("pid");  
         }
 
-        public int Star2() => Input.Split("\r\n\r\n").Where(p => Valid(p)).Count(t => new Passport(t).IsValid());
+        public int Star2() => Input.Split(Utils.DNL).Where(p => Valid(p)).Count(t => new Passport(t).IsValid());
         
     }
 
@@ -29,7 +29,7 @@ namespace AoC2020
         {
             public Passport(string p)
             {
-                var temp = p.Replace("\r\n", " ");
+                var temp = p.Replace(Utils.NL, " ");
                 foreach (var s in temp.Split(" "))
                 {
                     if (s.StartsWith("byr"))
@@ -109,7 +109,7 @@ namespace AoC2020
                 if(pid.Length != 9)
                     return false;
 
-                string[] pidOki = new string[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}; 
+                string[] pidOki = Enumerable.Range(0, 10).Select(i => i.ToString()).ToArray();
 
                 foreach (string s in pid.ToCharArray().Select(t => t.ToString()))
                 {
