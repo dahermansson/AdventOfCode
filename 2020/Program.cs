@@ -17,6 +17,7 @@ namespace AoC2020
             Dagar.Add(5, new Dag5());
             Dagar.Add(6, new Dag6());
             Dagar.Add(8, new Dag8());
+            Dagar.Add(9, new Dag9());
 
             Console.WriteLine($"Star 1: {Dagar[DagToRun].Star1()}");
             Console.WriteLine($"Star 2: {Dagar[DagToRun].Star2()}");

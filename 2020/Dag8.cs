@@ -17,11 +17,12 @@ namespace AoC2020
             {
                 Input = InputReader.GetInputLines("dag8.txt");
                 if(Input[i].StartsWith("jmp"))
+                {
                     Input[i] = Input[i].Replace("jmp", "nop");
-                
-                var cpu = new CPU(Input);
-                if(cpu.Run())
-                    return cpu.Accumulator;
+                    var cpu = new CPU(Input);
+                    if(cpu.Run())
+                        return cpu.Accumulator;
+                }
             }
             return -1;
         }
