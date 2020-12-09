@@ -8,9 +8,8 @@ namespace AoC2020
         private double[] input = InputReader.GetInputLines<double>("dag9.txt");
         public int Star1()
         {
-            int start = 25;
-            while (FindSumInRange(input.Skip(start - 25).Take(25).ToList(), input[start]))
-                start++;
+            int start = 24;
+            while (FindSumInRange(input.Skip(++start - 25).Take(25).ToList(), input[start])) {}
             return (int)input[start];
         }
 
@@ -18,11 +17,8 @@ namespace AoC2020
         {
             for (int i = 0; i < range.Count; i++)
                 for (int c = 0; c < range.Count; c++)
-                {
-                    if(c == i) continue;
-                    if(range[i] + range[c] == sum)
+                    if(range[i] != range[c] && range[i] + range[c] == sum)
                         return true;
-                }
             return false;
         }
 

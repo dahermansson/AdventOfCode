@@ -6,7 +6,7 @@ namespace AoC2020
     class Program
     {
         private static Dictionary<int, IDag> Dagar = new Dictionary<int, IDag>();
-        private static readonly int DagToRun = 8;
+        private static readonly int DagToRun = 9;
         
         static void Main(string[] args)
         {
