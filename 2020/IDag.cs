@@ -6,5 +6,6 @@ namespace AoC2020
     {
         int Star1();
         int Star2();
+        string Output();
     }
 }

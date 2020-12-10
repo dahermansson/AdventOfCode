@@ -39,5 +39,9 @@ namespace AoC2020
             }
             return (int)(input.Skip(start).Take(count).Min() + input.Skip(start).Take(count).Max());
         }
+        public string Output()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

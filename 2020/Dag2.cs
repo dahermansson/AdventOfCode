@@ -34,6 +34,11 @@ namespace AoC2020
                 return (Password[Least-1] == Char && Password[Most-1] != Char) ||
                     (Password[Least-1] != Char && Password[Most-1] == Char);
             }
+            
+        }
+        public string Output()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

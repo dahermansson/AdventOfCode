@@ -26,5 +26,9 @@ namespace AoC2020
             }
             return -1;
         }
+        public string Output()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -28,5 +28,9 @@ namespace AoC2020
             }
             return treeCount;
         }
+        public string Output()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

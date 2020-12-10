@@ -2,7 +2,7 @@ namespace AoC2020
 {
     public class Dag1 : IDag
     {
-          private static int[] InputLines = InputReader.GetInputLines<int>("dag1.txt");
+        private static int[] InputLines = InputReader.GetInputLines<int>("dag1.txt");
 
         public int Star1()
         {
@@ -21,6 +21,10 @@ namespace AoC2020
                         if(i + c + t== 2020)
                             return i * c * t;
             return -1;
+        }
+        public string Output()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
