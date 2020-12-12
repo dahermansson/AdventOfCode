@@ -38,10 +38,7 @@ namespace AoC2020
             throw new System.NotImplementedException();
         }
 
-        public string Output()
-        {
-            throw new System.NotImplementedException();
-        }
+        public string Output => throw new System.NotImplementedException();
 
         public class Bag
         {

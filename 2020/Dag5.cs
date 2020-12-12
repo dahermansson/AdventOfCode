@@ -13,9 +13,6 @@ namespace AoC2020
             var binery = notBinery.Replace("F", "0").Replace("B", "1").Replace("R", "1").Replace("L", "0");
             return Convert.ToInt32(binery.Substring(0, 7), 2) * 8 + Convert.ToInt32(binery.Substring(7, 3), 2);
         }
-        public string Output()
-        {
-            throw new System.NotImplementedException();
-        }
+        public string Output => throw new System.NotImplementedException();
     }
 }

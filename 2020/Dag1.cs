@@ -22,9 +22,6 @@ namespace AoC2020
                             return i * c * t;
             return -1;
         }
-        public string Output()
-        {
-            throw new System.NotImplementedException();
-        }
+        public string Output => throw new System.NotImplementedException();
     }
 }

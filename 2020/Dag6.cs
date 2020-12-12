@@ -21,9 +21,6 @@ namespace AoC2020
             }
             return sum;
         }
-        public string Output()
-        {
-            throw new System.NotImplementedException();
-        }
+        public string Output => throw new System.NotImplementedException();
     }
 }

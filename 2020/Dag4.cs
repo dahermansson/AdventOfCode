@@ -23,10 +23,7 @@ namespace AoC2020
 
         public int Star2() => Input.Split(Utils.DNL).Where(p => Valid(p)).Count(t => new Passport(t).IsValid());
 
-        public string Output()
-        {
-            throw new System.NotImplementedException();
-        }
+        public string Output => throw new System.NotImplementedException();
     }
 
     public class Passport

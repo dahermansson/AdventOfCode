@@ -61,6 +61,6 @@ namespace AoC2020
             if(_hashInput.TryGetValue(start +3, out n3))
                 FindNext(n3, goal);
         }
-        public string Output() => _star2Count.ToString();
+        public string Output => _star2Count.ToString();
     }
 }
