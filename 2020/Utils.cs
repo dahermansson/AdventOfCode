@@ -11,9 +11,7 @@ namespace AoC2020
         public static readonly string DNL = $"{NL}{NL}";
         public static Instruction ToInstruction(this string s) => new Instruction {Type = (Instructions)Enum.Parse(typeof(Instructions), s.Substring(0, 3)), Arg = int.Parse(s.Split(' ')[1]) };
         public static int ManhattanDistance(int x, int y) => Math.Abs(x) + Math.Abs(y);
-
         public static long LCM(long a, long b) => (a / GCD(a, b)) * b;
-
         public static long GCD(long a, long b)
         {
             while (b != 0)
@@ -35,5 +33,12 @@ namespace AoC2020
                 i++;
             }
         }
+        public static IEnumerable<T> LoopMatrix<T>(this T[,] source, int row, int col)
+        {
+            for (int i = 0; i < row; i++)
+                for (int c = 0; c < col; c++)
+                    yield return source[i,c];
+        }
+        
     }
 }
