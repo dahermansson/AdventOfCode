@@ -1,5 +1,6 @@
 using System.Linq;
 using System;
+using System.Collections.Generic;
 namespace AoC2020
 {
     public static class Utils
@@ -22,6 +23,17 @@ namespace AoC2020
                 a = temp;
             }
             return a;
+        }
+
+        public static IEnumerable<int> IndexOfMany<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            int i = 0;
+            foreach (var element in source)
+            {
+                if (predicate(element))
+                    yield return i;
+                i++;
+            }
         }
     }
 }

@@ -6,7 +6,8 @@ namespace AoC2020
     class Program
     {
         private static Dictionary<int, IDag> Dagar = new Dictionary<int, IDag>();
-        private static readonly int DagToRun = 13;
+
+        private static readonly int DagToRun = 14;
         
         static void Main(string[] args)
         {
@@ -21,14 +22,15 @@ namespace AoC2020
             Dagar.Add(10, new Dag10());
             Dagar.Add(12, new Dag12());
             Dagar.Add(13, new Dag13());
-
-
+            Dagar.Add(14, new Dag14());
 
             
-            Console.WriteLine($"Star 1: {Dagar[DagToRun].Star1()}");
+            var star1 = Dagar[DagToRun].Star1();
+            var output = star1 == -1 ? Dagar[DagToRun].Output: star1.ToString(); 
+            Console.WriteLine($"Star 1: { output}");
 
             var star2 = Dagar[DagToRun].Star2();
-            var output = star2 == -1 ? Dagar[DagToRun].Output: star2.ToString(); 
+            output = star2 == -1 ? Dagar[DagToRun].Output: star2.ToString(); 
             Console.WriteLine($"Star 2: { output}");
         }
     }
