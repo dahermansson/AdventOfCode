@@ -6,7 +6,7 @@ namespace AoC2020
     class Program
     {
         private static Dictionary<int, IDag> Dagar = new Dictionary<int, IDag>();
-        private static readonly int DagToRun = 12;
+        private static readonly int DagToRun = 13;
         
         static void Main(string[] args)
         {
@@ -20,6 +20,10 @@ namespace AoC2020
             Dagar.Add(9, new Dag9());
             Dagar.Add(10, new Dag10());
             Dagar.Add(12, new Dag12());
+            Dagar.Add(13, new Dag13());
+
+
+
             
             Console.WriteLine($"Star 1: {Dagar[DagToRun].Star1()}");
 
