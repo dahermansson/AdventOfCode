@@ -11,5 +11,6 @@ namespace AoC2020
         public static T[] GetInputLines<T>(string filename) => File.ReadAllLines(Path.Combine("inputs", filename)).Select( s => (T) Convert.ChangeType(s, typeof(T))).ToArray();
         public static string[][] GetInputLinesMatrix(string filename) => 
             File.ReadAllLines(Path.Combine("inputs", filename)).Select(t => t.ToCharArray().Select(p => p.ToString()).ToArray()).ToArray();
+        public static int[] GetIntArrayFromSingleLine(string filename) => File.ReadAllText(Path.Combine("inputs", filename)).Split(',').Select(int.Parse).ToArray();
     }
 }
