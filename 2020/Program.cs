@@ -7,7 +7,7 @@ namespace AoC2020
     {
         private static Dictionary<int, IDag> Dagar = new Dictionary<int, IDag>();
 
-        private static readonly int DagToRun = 23;
+        private static readonly int DagToRun = 24;
         
         static void Main(string[] args)
         {
@@ -28,6 +28,7 @@ namespace AoC2020
             Dagar.Add(20, new Dag20());
             Dagar.Add(22, new Dag22());
             Dagar.Add(23, new Dag23());
+            Dagar.Add(24, new Dag24());
 
 
             var star1 = Dagar[DagToRun].Star1();
