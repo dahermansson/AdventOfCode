@@ -6,4 +6,8 @@
     <RootNamespace>AoC2020</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
+  </ItemGroup>
+
 </Project>
