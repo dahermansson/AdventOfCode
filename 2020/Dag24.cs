@@ -12,7 +12,6 @@ namespace AoC2020
 
         public int Star1()
         {
-
             Dictionary<Tuple<int, int>, bool> tiles = new Dictionary<Tuple<int, int>, bool>();
             foreach (var line in input)
             {
