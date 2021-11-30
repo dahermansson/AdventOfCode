@@ -1,7 +1,9 @@
 using System.Linq;
+using AoC.Utils;
+
 namespace AoC2020
 {
-    public class Dag8 : IDag
+    public class Dag8 : IDay
     {
         private string[] Input = InputReader.GetInputLines("dag8.txt");
         public int Star1()

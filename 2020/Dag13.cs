@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using AoC.Utils;
+
 namespace AoC2020
 {
-    public class Dag13 : IDag
+    public class Dag13 : IDay
     {
         public string Output {get ;set;}
 
@@ -48,14 +50,6 @@ namespace AoC2020
                                 }
                 t += a.First().Value; 
             }
-           
-
-
-
-
-
-
-            return -1;
         }
     }
 }

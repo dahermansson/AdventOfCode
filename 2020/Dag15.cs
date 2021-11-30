@@ -1,10 +1,11 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag15 : IDag
+    public class Dag15 : IDay
     {
         
         List<int> input = InputReader.GetIntArrayFromSingleLine("dag15.txt").ToList();

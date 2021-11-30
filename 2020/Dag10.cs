@@ -1,9 +1,11 @@
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using AoC.Utils;
+
 namespace AoC2020
 {
-    public class Dag10 : IDag
+    public class Dag10 : IDay
     {
         private int[] input = InputReader.GetInputLines<int>("dag10.txt");
         public int Star1()

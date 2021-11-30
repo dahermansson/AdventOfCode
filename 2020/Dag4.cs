@@ -6,7 +6,7 @@ using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag4 : IDag
+    public class Dag4 : IDay
     {
         private static string Input = InputReader.GetInput("dag4.txt");
         public int Star1() => Input.Split(Utils.DNL).Count(p => Valid(p));

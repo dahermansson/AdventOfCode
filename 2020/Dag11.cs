@@ -5,7 +5,7 @@ using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag11 : IDag
+    public class Dag11 : IDay
     {
         private string[][] Input = InputReader.GetInputLinesMatrix("dag11.txt");
         public string Output => throw new System.NotImplementedException();

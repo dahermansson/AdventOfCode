@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag20 : IDag
+    public class Dag20 : IDay
     {
         private string[] input = InputReader.GetInputLines("dag20.txt");
         public string Output => _output;

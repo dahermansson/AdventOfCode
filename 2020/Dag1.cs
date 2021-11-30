@@ -1,6 +1,8 @@
+using AoC.Utils;
+
 namespace AoC2020
 {
-    public class Dag1 : IDag
+    public class Dag1 : IDay
     {
         private static int[] InputLines = InputReader.GetInputLines<int>("dag1.txt");
 

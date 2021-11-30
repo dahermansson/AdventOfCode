@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using AoC.Utils;
+
 namespace AoC2020
 {
-    public class Dag2 : IDag
+    public class Dag2 : IDay
     {
         private static string[] InputLines = InputReader.GetInputLines("dag2.txt");
         public int Star1() => InputLines.Select(t => new PolicyPassword(t.Split(' '))).Count(t => t.IsValidToSledRentalPlaceDownTheStreet());

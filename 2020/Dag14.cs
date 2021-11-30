@@ -6,7 +6,7 @@ using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag14 : IDag
+    public class Dag14 : IDay
     {
         public string Output => _output;
         private string _output;

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag3 : IDag
+    public class Dag3 : IDay
     {
         private static string[][] InputLines = InputReader.GetInputLinesMatrix("dag3.txt");
         public int Star1() => TobogganRun((1, 3));

@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
+using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag5 : IDag
+    public class Dag5 : IDay
     {
         public static int[] Input = InputReader.GetInputLines("dag5.txt").Select(s => ToInt(s)).ToArray();
         public int Star1() => Input.Max();

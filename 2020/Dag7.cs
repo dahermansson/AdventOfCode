@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
+using AoC.Utils;
+
 namespace AoC2020
 {
-    public class Dag7 : IDag
+    public class Dag7 : IDay
     {
         private string[] Input = InputReader.GetInputLines("dag7.txt");
         public int Star1()
         {
-            string yourBag = "shiny gold";
             var rules = Input.Select(t => CreateBag(t)).ToList();
-
             return -1;
         }
 
@@ -29,7 +29,6 @@ namespace AoC2020
                 }
             }
             return bag;
-
         }
 
 

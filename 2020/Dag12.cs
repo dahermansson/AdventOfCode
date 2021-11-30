@@ -5,7 +5,7 @@ using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag12 : IDag
+    public class Dag12 : IDay
     {
         public string Output => throw new System.NotImplementedException();
 

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag22 : IDag
+    public class Dag22 : IDay
     {
         public string Output => throw new NotImplementedException();
         private int[] input = InputReader.GetInputLines("dag22.txt").Where(t => int.TryParse(t, out int i)).Select(int.Parse).ToArray();

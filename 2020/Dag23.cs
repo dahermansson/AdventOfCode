@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag23 : IDag
+    public class Dag23 : IDay
     {
         public string Output => _output;
         private string _output;

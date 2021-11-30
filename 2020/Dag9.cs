@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using AoC.Utils;
 
 namespace AoC2020
 {
-    public class Dag9 : IDag
+    public class Dag9 : IDay
     {
         private double[] input = InputReader.GetInputLines<double>("dag9.txt");
         public int Star1()
