@@ -2,6 +2,7 @@ using System.Linq;
 
 using System.Collections.Generic;
 using System.Drawing;
+using AoC.Utils;
 
 namespace AoC2020
 {

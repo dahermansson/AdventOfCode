@@ -1,16 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace AoC2020
 {
     public class CPU
     {
+        public Instruction ToInstruction(string s) => new Instruction {Type = (Instructions)Enum.Parse(typeof(Instructions), s.Substring(0, 3)), Arg = int.Parse(s.Split(' ')[1]) };
         private List<Instruction> _program;
         private int _pointer = 0;
         public int Accumulator { get; set; }
 
         public CPU(string[] instructions)
         {
-            _program = instructions.Select(t => t.ToInstruction()).ToList();
+            _program = instructions.Select(t => ToInstruction(t)).ToList();
         }
         public bool Run()
         {

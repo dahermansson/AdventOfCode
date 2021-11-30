@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using AoC.Utils;
 
 namespace AoC2020
 {

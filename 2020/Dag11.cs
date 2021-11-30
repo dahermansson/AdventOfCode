@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using AoC.Utils;
+
 namespace AoC2020
 {
     public class Dag11 : IDag

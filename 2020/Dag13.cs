@@ -17,7 +17,6 @@ namespace AoC2020
 
         public int Star2()
         {
-            throw new NotImplementedException();
             var busses = InputReader.GetInputLines("dag13.txt")[1].Split(",");
 
             var a = new Dictionary<int, int>();
