@@ -7,6 +7,7 @@ Dictionary<int, IDay> Days = new Dictionary<int, IDay>();
 
 Days.Add(1, new Day1());
 Days.Add(2, new Day2());
+Days.Add(3, new Day3());
 
 int DayToRun = Days.Last().Key;
 

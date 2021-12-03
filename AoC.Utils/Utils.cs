@@ -1,6 +1,9 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections;
+using System.Text;
+
 namespace AoC.Utils
 {
     public static class Utils
@@ -38,6 +41,33 @@ namespace AoC.Utils
                 for (int c = 0; c < col; c++)
                     yield return source[i,c];
         }
+
+        public static IEnumerable<char> GetColumn(this string[] source, int index)
+        {
+            if(!source.All(t => t.Length == source[0].Length))
+                throw new Exception("not square input");
+            for (int i = 0; i < source.Length; i++)
+                yield return source[i][index];
+        }
+
+        public static BitArray ToBitArray(this string s) => new BitArray(s.Reverse().Select(t => t == '1').ToArray());
+        public static int ToInt(this BitArray bits)
+        {
+            int[] res = new int[1];
+            bits.CopyTo(res, 0);
+            return res[0];
+        }
+        public static int ToIntRev(this BitArray bits)
+        {
+            var temp = new BitArray(bits.Length);
+            int index = 0;
+            for (int i = bits.Length -1; i > -1; i--)
+                temp[index++] = bits[i];
+            int[] res = new int[1];
+            temp.CopyTo(res, 0);
+            return res[0];
+        }
+
         
     }
 }
