@@ -34,7 +34,7 @@ namespace AoC2020
             }
             while(change.Count > 0);
 
-            return _matrix.LoopMatrix(_matrix.GetLength(0), _matrix.GetLength(1)).Count(t => t.Value == '#');
+            return _matrix.GetAll().Count(t => t.Value == '#');
         }
 
         public int Star2()

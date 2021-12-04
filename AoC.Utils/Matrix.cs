@@ -34,7 +34,7 @@ namespace AoC.Utils
                 for (int col = 0; col < Columns; col++)
                     yield return _matrix[row,col];
         }
-
+        
         public IEnumerable<T> GetRow(int row)
         {
              for (int i = 0; i < Columns; i++)

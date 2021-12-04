@@ -5,7 +5,7 @@ using AoC2020;
 
 Dictionary<int, IDay> Days = new Dictionary<int, IDay>();
 
-int DayToRun = 24;
+int DayToRun = 11;
       
 Days.Add(1, new Dag1());
 Days.Add(2, new Dag2());
