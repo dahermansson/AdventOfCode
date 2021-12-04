@@ -27,6 +27,7 @@ namespace AoC.Utils
 
         public static IEnumerable<int> IndexOfMany<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
+            //source.Select((e, i) => new {Index = i, Value = e}).Where(t => predicate(t.Value)).Select( t => t.Index);
             int i = 0;
             foreach (var element in source)
             {
@@ -34,12 +35,6 @@ namespace AoC.Utils
                     yield return i;
                 i++;
             }
-        }
-        public static IEnumerable<T> LoopMatrix<T>(this T[,] source, int row, int col)
-        {
-            for (int i = 0; i < row; i++)
-                for (int c = 0; c < col; c++)
-                    yield return source[i,c];
         }
 
         public static IEnumerable<char> GetColumn(this string[] source, int index)
@@ -67,7 +62,5 @@ namespace AoC.Utils
             temp.CopyTo(res, 0);
             return res[0];
         }
-
-        
     }
 }
