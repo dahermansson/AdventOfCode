@@ -25,7 +25,7 @@ namespace AoC.Utils
         {
             Rows = square ? new int[]{ width , heigth}.Max() : heigth;
             Columns = square ? Rows : width;
-            _matrix = new T[Columns, Rows];
+            _matrix = new T[Rows, Columns];
             Input = new string[1];
         }
 
@@ -71,6 +71,24 @@ namespace AoC.Utils
         {
              for (int i = 0; i < Rows; i++)
                 yield return _matrix[i, col];
+        }
+
+        private IEnumerable<Tuple<int, int>> NeighboursDef = new List<Tuple<int, int>>()
+        {
+            new Tuple<int, int>(-1, -1),
+            new Tuple<int, int>(-1, 0),
+            new Tuple<int, int>(-1, 1),
+            new Tuple<int, int>(0, -1),
+            new Tuple<int, int>(0, 1),
+            new Tuple<int, int>(1, -1),
+            new Tuple<int, int>(1, 0),
+            new Tuple<int, int>(1, 1)
+        };
+
+        public IEnumerable<(int x, int y, T value)> GetNeighbours(int row, int col)
+        {
+            var inMatrix = NeighboursDef.Where(t => row + t.Item1 >= 0 && row + t.Item1 < _matrix.GetLength(0) && col + t.Item2 >= 0 && col + t.Item2 < _matrix.GetLength(1)).ToList();
+            return inMatrix.Select(t => (col + t.Item2, row + t.Item1, _matrix[row + t.Item1, col +t.Item2]));
         }
 
     }

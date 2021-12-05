@@ -7,36 +7,30 @@ namespace AoC2020
 {
     public class Dag11 : IDay
     {
-        private string[][] Input = InputReader.GetInputLinesMatrix("dag11.txt");
+        private string[] Input = InputReader.GetInputLines("dag11.txt");
         public string Output => throw new System.NotImplementedException();
         public int Star1()
         {
-            var matrix = new Matrix<char>(InputReader.GetInputLines("dag11.txt"), false);
-            
-            //var _matrix = new Position[Input.Length, Input[0].Length];
-            //for (int i = 0; i < _matrix.GetLength(0); i++)
-              //  for (int c = 0; c < _matrix.GetLength(1); c++)
-                //    _matrix[i,c] = new Position(i, c, ref _matrix, Input[i][c][0]);
-
-            List<Position> change = new List<Position>();
+            var matrix = new Matrix<char>(Input, false);
+            var change = new List<(int row, int col, char value)>();
             do
             {
                 change.Clear();
-                for (int i = 0; i < matrix.Rows; i++)
-                    for (int c = 0; c < matrix.Columns; c++)
-                        if(((matrix.GetValue(i,c)== 'L' && matrix.GetNeighbours(i,c).All(t => t != '#'))
+                for (int row = 0; row < matrix.Rows; row++)
+                    for (int col = 0; col < matrix.Columns; col++)
+                        if(((matrix.Grid[row, col] == 'L' && matrix.GetNeighbours(row,col).All(t => t.value != '#'))
                         || 
-                         (matrix.GetValue(i,c) == '#' && matrix.GetNeighbours(i,c).Count(t => t == '#') > 3)))
-                            change.Add(matrix.GetValue(i,c));
+                         (matrix.Grid[row, col] == '#' && matrix.GetNeighbours(row, col).Count(t => t.value == '#') > 3)))
+                            change.Add((row, col , matrix.Grid[row, col]));
 
-                change.ForEach( c => 
+                change.ForEach( seat => 
                 {
-                    c.Value = c.Value == '#' ? 'L' : '#';
+                    matrix.Grid[seat.row, seat.col] = matrix.Grid[seat.row, seat.col] == '#' ? 'L' : '#';
                 });
             }
             while(change.Count > 0);
 
-            return _matrix.GetAll().Count(t => t.Value == '#');
+            return matrix.GetAll().Count(t => t == '#');
         }
 
         public int Star2()
