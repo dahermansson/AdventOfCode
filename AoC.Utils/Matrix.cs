@@ -5,6 +5,12 @@ using System.Threading.Tasks;
 
 namespace AoC.Utils
 {
+    //X ->
+    //0 1 2 3
+    //1 Y
+    //2 |
+    //3 V
+
     public class Matrix<T>
     {
         private T[,] _matrix;
@@ -12,6 +18,16 @@ namespace AoC.Utils
         public int Columns { get; set; }
         public string[] Input { get; private set; }
         public bool SpaceSeparator { get; set; }
+        public T[,] Grid { get {return _matrix;} }
+
+
+        public Matrix(int width, int heigth, bool square = true)
+        {
+            Rows = square ? new int[]{ width , heigth}.Max() : heigth;
+            Columns = square ? Rows : width;
+            _matrix = new T[Columns, Rows];
+            Input = new string[1];
+        }
 
         public Matrix(string[] input, bool spaceSeperator)
         {
