@@ -11,21 +11,23 @@ namespace AoC2020
         public string Output => throw new System.NotImplementedException();
         public int Star1()
         {
-            var _matrix = new Position[Input.Length, Input[0].Length];
-            for (int i = 0; i < _matrix.GetLength(0); i++)
-                for (int c = 0; c < _matrix.GetLength(1); c++)
-                    _matrix[i,c] = new Position(i, c, ref _matrix, Input[i][c][0]);
+            var matrix = new Matrix<char>(InputReader.GetInputLines("dag11.txt"), false);
+            
+            //var _matrix = new Position[Input.Length, Input[0].Length];
+            //for (int i = 0; i < _matrix.GetLength(0); i++)
+              //  for (int c = 0; c < _matrix.GetLength(1); c++)
+                //    _matrix[i,c] = new Position(i, c, ref _matrix, Input[i][c][0]);
 
             List<Position> change = new List<Position>();
             do
             {
                 change.Clear();
-                for (int i = 0; i < _matrix.GetLength(0); i++)
-                    for (int c = 0; c < _matrix.GetLength(1); c++)
-                        if(((_matrix[i,c].Value == 'L' && _matrix[i,c].GetNeighbours().All(t => t.Value != '#'))
+                for (int i = 0; i < matrix.Rows; i++)
+                    for (int c = 0; c < matrix.Columns; c++)
+                        if(((matrix.GetValue(i,c)== 'L' && matrix.GetNeighbours(i,c).All(t => t != '#'))
                         || 
-                         (_matrix[i,c].Value == '#' && _matrix[i,c].GetNeighbours().Count(t => t.Value == '#') > 3)))
-                            change.Add(_matrix[i,c]);
+                         (matrix.GetValue(i,c) == '#' && matrix.GetNeighbours(i,c).Count(t => t == '#') > 3)))
+                            change.Add(matrix.GetValue(i,c));
 
                 change.ForEach( c => 
                 {
