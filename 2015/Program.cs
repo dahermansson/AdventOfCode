@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AoC.Utils;
+using AoC2015;
 
-namespace AoC2015
-{
-    class Program
-    {
-        private static Dictionary<int, IDag> Dagar = new Dictionary<int, IDag>();
-        private static readonly int DagToRun = 3;
-        static void Main(string[] args)
-        {
-            Dagar.Add(1, new Dag1());
-            Dagar.Add(2, new Dag2());
-            Dagar.Add(3, new Dag3());
+Dictionary<int, IDay> Days = new Dictionary<int, IDay>();
 
-            Console.WriteLine($"Star 1: {Dagar[DagToRun].Star1()}");
-            Console.WriteLine($"Star 2: {Dagar[DagToRun].Star2()}");
-        }
-    }
-}
+Days.Add(1, new Day1());
+
+
+
+int DayToRun = Days.Last().Key;
+
+var star1 = Days[DayToRun].Star1();
+var output = star1 == -1 ? Days[DayToRun].Output: star1.ToString(); 
+Console.WriteLine($"Star 1: { output}");
+
+var star2 = Days[DayToRun].Star2();
+output = star2 == -1 ? Days[DayToRun].Output: star2.ToString(); 
+Console.WriteLine($"Star 2: { output}");

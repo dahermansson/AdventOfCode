@@ -1,7 +1,0 @@
-{
-    "files.exclude": {
-        "**/obj": true,
-        "**/bin": true
-    },
-    "git.autofetch": true
-}
