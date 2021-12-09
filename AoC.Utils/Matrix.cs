@@ -150,12 +150,23 @@ namespace AoC.Utils
             var iCol = col + dir.Item2;
             while(iRow < Rows && iCol < Columns && iRow > -1 && iCol > -1)
             {
-                yield return Get(iRow, iCol);
-                if(predicate(Get(iRow, iCol).Value))
+                var mxPoint = Get(iRow, iCol);
+                yield return mxPoint;
+                if(mxPoint.Value != null && predicate(mxPoint.Value))
                     break;
                 iRow+=dir.Item1;
                 iCol +=dir.Item2;
-                
+            }
+        }
+        public IEnumerable<MatrixPoint<T>> GetInDirection(Tuple<int, int> dir, int row, int col)
+        {
+            var iRow = row + dir.Item1;
+            var iCol = col + dir.Item2;
+            while(iRow < Rows && iCol < Columns && iRow > -1 && iCol > -1)
+            {
+                yield return Get(iRow, iCol);
+                iRow+=dir.Item1;
+                iCol +=dir.Item2;
             }
         }
     }
