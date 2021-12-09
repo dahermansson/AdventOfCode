@@ -25,14 +25,6 @@ namespace AoC.Utils
             return a;
         }
 
-/*
-        public static IEnumerable<T> Flatten(this T[][] source)
-        {
-            for (int i = 0; i < source.Length; i++)
-                for (int c = 0; c < source[i].Length; c++)
-                    yield return source[i][c];
-        }
-*/
         public static IEnumerable<int> IndexOfMany<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             //source.Select((e, i) => new {Index = i, Value = e}).Where(t => predicate(t.Value)).Select( t => t.Index);
