@@ -19,7 +19,7 @@ namespace AoC2021
             foreach (var line in lines)
                 AddLine(matrix, line);
             
-            return matrix.GetAll().Count(t => t > 1);
+            return matrix.GetAllValues().Count(t => t > 1);
         }
         private void AddLine(Matrix<int> matrix, Line line)
         {

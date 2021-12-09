@@ -25,6 +25,14 @@ namespace AoC.Utils
             return a;
         }
 
+/*
+        public static IEnumerable<T> Flatten(this T[][] source)
+        {
+            for (int i = 0; i < source.Length; i++)
+                for (int c = 0; c < source[i].Length; c++)
+                    yield return source[i][c];
+        }
+*/
         public static IEnumerable<int> IndexOfMany<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             //source.Select((e, i) => new {Index = i, Value = e}).Where(t => predicate(t.Value)).Select( t => t.Index);
@@ -35,14 +43,6 @@ namespace AoC.Utils
                     yield return i;
                 i++;
             }
-        }
-
-        public static IEnumerable<char> GetColumn(this string[] source, int index)
-        {
-            if(!source.All(t => t.Length == source[0].Length))
-                throw new Exception("not square input");
-            for (int i = 0; i < source.Length; i++)
-                yield return source[i][index];
         }
 
         public static BitArray ToBitArray(this string s) => new BitArray(s.Reverse().Select(t => t == '1').ToArray());
@@ -70,7 +70,6 @@ namespace AoC.Utils
             // Ensure that the source IEnumerable is evaluated only once
             return permutations(source.ToArray());
         }
-
         private static IEnumerable<IEnumerable<T>> permutations<T>(IEnumerable<T> source)
         {
             var c = source.Count();

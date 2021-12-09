@@ -11,40 +11,35 @@ namespace AoC2021
         public string Output => throw new NotImplementedException();
 
         private Matrix<int> Input = new Matrix<int>(InputReader.GetInputLines("9.txt"), false);
-
-        public int Star1() => Input.GetAllPositions().Where(p => Input.GetCrossNeighbours(p.Row, p.Col).All(v => v.Value > p.Value)).Sum(t => t.Value +1);
-        
+        public int Star1() => Input.GetAllPositions().Where(p => Input.GetCrossNeighbours(p.Row, p.Column).All(v => v.Value > p.Value)).Sum(t => t.Value +1);
 
         public int Star2()
         {
-            var lowPoints = Input.GetAllPositions().Where(p => Input.GetCrossNeighbours(p.Row, p.Col).All(v => v.Value > p.Value)).ToList();
+            var lowPoints = Input.GetAllPositions().Where(p => Input.GetCrossNeighbours(p.Row, p.Column).All(v => v.Value > p.Value)).ToList();
             var basinsSize = new List<int>();
-            var posInBasin = new List<(int Row, int Col)>();
-            foreach (var lowpoint in lowPoints.OrderBy(t => t.Row).ThenBy(t => t.Col))
+            var posInBasin = new HashSet<string>();
+            foreach (var lowPoint in lowPoints)
             {
-                posInBasin.Add(new (lowpoint.Row, lowpoint.Col));
-                var b = new List<(int Row, int Col, int Value)> { new(lowpoint.Row, lowpoint.Col, lowpoint.Value)};
-                for (int i = 0; i < b.Count; i++)
+                posInBasin.Add(lowPoint.PosToString);
+                var basinPositions = new List<MatrixPoint<int>> { lowPoint };
+                for (int i = 0; i < basinPositions.Count; i++)
                 {
-                    var basins = GetBasin(b[i]);
+                    var basins = GetBasin(basinPositions[i]);
                     foreach (var basin in basins)
-                    {
-                        if(!posInBasin.Any(t => t.Row == basin.Row && t.Col == basin.Col))
+                        if(!posInBasin.Contains(basin.PosToString))
                         {
-                            posInBasin.Add(new (basin.Row, basin.Col));
-                            b.Add(basin);
+                            posInBasin.Add(basin.PosToString);
+                            basinPositions.Add(basin);
                         }
-                    }
                 }
-                basinsSize.Add(b.Count);  
+                basinsSize.Add(basinPositions.Count);  
             }
-            var bigThree = basinsSize.OrderByDescending(t => t).Take(3).ToArray();
-            return bigThree[0] * bigThree[1] * bigThree[2];
+            return basinsSize.OrderByDescending(t => t).Take(3).Aggregate((n, next) => n *= next);
         }
 
-        private List<(int Row, int Col, int Value)>GetBasin((int Row, int Col, int Value)basin)
+        private IEnumerable<MatrixPoint<int>>GetBasin(MatrixPoint<int> pos)
         {
-            return Input.GetCrossNeighbours(basin.Row, basin.Col).Where(t => t.Value != 9 && t.Value > basin.Value).ToList();
+            return Input.GetCrossNeighbours(pos.Row, pos.Column).Where(t => t.Value != 9 && t.Value > pos.Value).ToList();
         }
     }
 }

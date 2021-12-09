@@ -41,7 +41,7 @@ namespace AoC2021
             {
                 foreach (var bingoBoard in boards)
                     if(CheckBingo(bingoBoard, drawnNumbers))
-                        return bingoBoard.Board.GetAll().Where(t => !drawnNumbers.Contains(t)).Sum() * drawnNumbers.Last();
+                        return bingoBoard.Board.GetAllValues().Where(t => !drawnNumbers.Contains(t)).Sum() * drawnNumbers.Last();
                 drawnNumbers.Add(number);
             }
             return -1;
@@ -55,7 +55,7 @@ namespace AoC2021
             {
                 foreach (var bingoBoard in boards.Where(t => !t.Bingo))
                     if(CheckBingo(bingoBoard, drawnNumbers) && boards.All(t => t.Bingo))
-                        return bingoBoard.Board.GetAll().Where(t => !drawnNumbers.Contains(t)).Sum() * drawnNumbers.Last();
+                        return bingoBoard.Board.GetAllValues().Where(t => !drawnNumbers.Contains(t)).Sum() * drawnNumbers.Last();
                 drawnNumbers.Add(number);
             }
             return -1;

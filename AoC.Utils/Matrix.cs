@@ -11,6 +11,20 @@ namespace AoC.Utils
     //2 |
     //3 V
 
+    public class MatrixPoint<T>
+    {
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public T? Value { get; set; }
+        public MatrixPoint(int row, int col, T value)
+        {
+            Row = row;
+            Column = col;
+            Value = value;
+        }
+        public string PosToString { get {return $"{Row}:{Column}";}}
+    }
+
     public class Matrix<T>
     {
         private T[,] _matrix;
@@ -44,18 +58,22 @@ namespace AoC.Utils
 
         private string GetValueFromInput(int row, int col) => SpaceSeparator ? Input[row].Split(" ")[col] : Input[row][col].ToString();
 
-        public IEnumerable<T> GetAll()
+        public MatrixPoint<T> Get(int row, int col)
+        {
+            return new MatrixPoint<T>(row, col, _matrix[row, col]);
+        }
+        public IEnumerable<T> GetAllValues()
         {
             for (int row = 0; row < Rows; row++)
                 for (int col = 0; col < Columns; col++)
                     yield return _matrix[row,col];
         }
 
-        public IEnumerable<(int Row, int Col, T Value)> GetAllPositions()
+        public IEnumerable<MatrixPoint<T>> GetAllPositions()
         {
             for (int row = 0; row < Rows; row++)
                 for (int col = 0; col < Columns; col++)
-                    yield return new (row, col, _matrix[row,col]);
+                    yield return new MatrixPoint<T>(row, col, _matrix[row,col]);
         }
         
         public IEnumerable<T> GetRow(int row)
@@ -80,7 +98,7 @@ namespace AoC.Utils
                 yield return _matrix[i, col];
         }
 
-        private IEnumerable<Tuple<int, int>> NeighboursDef = new List<Tuple<int, int>>()
+        public IEnumerable<Tuple<int, int>> NeighboursDef = new List<Tuple<int, int>>()
         {
             new Tuple<int, int>(-1, -1),
             new Tuple<int, int>(-1, 0),
@@ -100,17 +118,45 @@ namespace AoC.Utils
             new Tuple<int, int>(1, 0),
         };
 
-        public IEnumerable<(int x, int y, T value)> GetNeighbours(int row, int col)
+        private IEnumerable<Tuple<int, int>> XNeighboursDef = new List<Tuple<int, int>>()
+        {
+            new Tuple<int, int>(-1, -1),
+            new Tuple<int, int>(-1, 1),
+            new Tuple<int, int>(1, -1),
+            new Tuple<int, int>(1, 1),
+        };
+
+        public IEnumerable<MatrixPoint<T>> GetNeighbours(int row, int col)
         {
             var inMatrix = NeighboursDef.Where(t => row + t.Item1 >= 0 && row + t.Item1 < _matrix.GetLength(0) && col + t.Item2 >= 0 && col + t.Item2 < _matrix.GetLength(1)).ToList();
-            return inMatrix.Select(t => (col + t.Item2, row + t.Item1, _matrix[row + t.Item1, col +t.Item2]));
+            return inMatrix.Select(t => new MatrixPoint<T>(row + t.Item1, col + t.Item2, _matrix[row + t.Item1, col +t.Item2]));
         }
 
-        public IEnumerable<(int Row, int Col, T Value)> GetCrossNeighbours(int row, int col)
+        public IEnumerable<MatrixPoint<T>> GetCrossNeighbours(int row, int col)
         {
             var inMatrix = CrossNeighboursDef.Where(t => row + t.Item1 >= 0 && row + t.Item1 < _matrix.GetLength(0) && col + t.Item2 >= 0 && col + t.Item2 < _matrix.GetLength(1)).ToList();
-            return inMatrix.Select(t => (row + t.Item1, col + t.Item2, _matrix[row + t.Item1, col +t.Item2]));
+            return inMatrix.Select(t => new MatrixPoint<T>(row + t.Item1, col + t.Item2, _matrix[row + t.Item1, col +t.Item2]));
         }
 
+        public IEnumerable<MatrixPoint<T>> GetXNeighbours(int row, int col)
+        {
+            var inMatrix = XNeighboursDef.Where(t => row + t.Item1 >= 0 && row + t.Item1 < _matrix.GetLength(0) && col + t.Item2 >= 0 && col + t.Item2 < _matrix.GetLength(1)).ToList();
+            return inMatrix.Select(t => new MatrixPoint<T>(row + t.Item1, col + t.Item2, _matrix[row + t.Item1, col +t.Item2]));
+        }
+
+        public IEnumerable<MatrixPoint<T>> GetInDirection(Tuple<int, int> dir, int row, int col, Func<T, bool> predicate)
+        {
+            var iRow = row + dir.Item1;
+            var iCol = col + dir.Item2;
+            while(iRow < Rows && iCol < Columns && iRow > -1 && iCol > -1)
+            {
+                yield return Get(iRow, iCol);
+                if(predicate(Get(iRow, iCol).Value))
+                    break;
+                iRow+=dir.Item1;
+                iCol +=dir.Item2;
+                
+            }
+        }
     }
 }
