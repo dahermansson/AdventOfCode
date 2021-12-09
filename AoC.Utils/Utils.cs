@@ -37,13 +37,6 @@ namespace AoC.Utils
             }
         }
 
-        public static IEnumerable<T> GetAll<T>(this T[,] source)
-        {
-            for (int row = 0; row < source.GetLength(0); row++)
-                for (int col = 0; col < source.GetLength(1); col++)
-                    yield return source[row,col];
-        }
-
         public static IEnumerable<char> GetColumn(this string[] source, int index)
         {
             if(!source.All(t => t.Length == source[0].Length))

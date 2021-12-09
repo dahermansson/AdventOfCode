@@ -50,6 +50,13 @@ namespace AoC.Utils
                 for (int col = 0; col < Columns; col++)
                     yield return _matrix[row,col];
         }
+
+        public IEnumerable<(int Row, int Col, T Value)> GetAllPositions()
+        {
+            for (int row = 0; row < Rows; row++)
+                for (int col = 0; col < Columns; col++)
+                    yield return new (row, col, _matrix[row,col]);
+        }
         
         public IEnumerable<T> GetRow(int row)
         {
@@ -85,10 +92,24 @@ namespace AoC.Utils
             new Tuple<int, int>(1, 1)
         };
 
+        private IEnumerable<Tuple<int, int>> CrossNeighboursDef = new List<Tuple<int, int>>()
+        {
+            new Tuple<int, int>(-1, 0),
+            new Tuple<int, int>(0, -1),
+            new Tuple<int, int>(0, 1),
+            new Tuple<int, int>(1, 0),
+        };
+
         public IEnumerable<(int x, int y, T value)> GetNeighbours(int row, int col)
         {
             var inMatrix = NeighboursDef.Where(t => row + t.Item1 >= 0 && row + t.Item1 < _matrix.GetLength(0) && col + t.Item2 >= 0 && col + t.Item2 < _matrix.GetLength(1)).ToList();
             return inMatrix.Select(t => (col + t.Item2, row + t.Item1, _matrix[row + t.Item1, col +t.Item2]));
+        }
+
+        public IEnumerable<(int Row, int Col, T Value)> GetCrossNeighbours(int row, int col)
+        {
+            var inMatrix = CrossNeighboursDef.Where(t => row + t.Item1 >= 0 && row + t.Item1 < _matrix.GetLength(0) && col + t.Item2 >= 0 && col + t.Item2 < _matrix.GetLength(1)).ToList();
+            return inMatrix.Select(t => (row + t.Item1, col + t.Item2, _matrix[row + t.Item1, col +t.Item2]));
         }
 
     }
