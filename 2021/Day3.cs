@@ -16,7 +16,7 @@ namespace AoC2021
             int nBits = Input[0].Length;
             var bits = new BitArray(nBits);
             for (int i = 0; i < nBits ; i++)
-                bits[i] = Input.GetColumn(i).Count(t => t == '1') > Input.Length/2;
+                bits[i] = GetColumn(Input, i).Count(t => t == '1') > Input.Length/2;
             return bits.ToIntRev() * bits.Not().ToIntRev();
         }
 
@@ -38,7 +38,7 @@ namespace AoC2021
 
         private string[] GetMostInPosition(string[] source, int index, char value)
         {
-            var keepValue = source.GetColumn(index).Count(t => t == value) >= source.GetColumn(index).Count(t => t != value);
+            var keepValue = GetColumn(source, index).Count(t => t == value) >= GetColumn(source, index).Count(t => t != value);
             if( keepValue)
                 return source.Where(t => t[index] == value).ToArray();
             else 
@@ -47,11 +47,17 @@ namespace AoC2021
 
         private string[] GetFewestInPosition(string[] source, int index, char value)
         {
-            var keepValue = source.GetColumn(index).Count(t => t == value) <= source.GetColumn(index).Count(t => t != value);
+            var keepValue = GetColumn(source, index).Count(t => t == value) <= GetColumn(source, index).Count(t => t != value);
             if( keepValue)
                 return source.Where(t => t[index] == value).ToArray();
             else 
                 return source.Where(t => t[index] != value).ToArray();
+        }
+
+        private IEnumerable<char> GetColumn(string[] source, int index)
+        {
+            foreach (var row in source)
+                yield return row[index];
         }
      }
 }
