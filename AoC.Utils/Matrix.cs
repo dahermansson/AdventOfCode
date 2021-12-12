@@ -69,6 +69,24 @@ namespace AoC.Utils
                     yield return _matrix[row,col];
         }
 
+        public IEnumerable<string> GetStrings()
+        {
+            foreach (var row in GetAllRows())
+                yield return string.Join("", row);
+        }
+
+        public void UpdateAll(Func<T, T> update)
+        {
+            for (int row = 0; row < Rows; row++)
+                for (int col = 0; col < Columns; col++)
+                    _matrix[row, col] = update(_matrix[row, col]);
+        }
+
+        public void Update(int row, int col, Func<T, T> update)
+        {
+            _matrix[row, col] = update(_matrix[row, col]);
+        }
+
         public IEnumerable<MatrixPoint<T>> GetAllPositions()
         {
             for (int row = 0; row < Rows; row++)
