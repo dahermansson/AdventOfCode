@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AoC.Utils
@@ -35,10 +36,10 @@ namespace AoC.Utils
         public T[,] Grid { get {return _matrix;} }
 
 
-        public Matrix(int width, int heigth, bool square = true)
+        public Matrix(int rows, int cols, bool square = true)
         {
-            Rows = square ? new int[]{ width , heigth}.Max() : heigth;
-            Columns = square ? Rows : width;
+            Rows = square ? new int[]{ rows , cols}.Max() : rows;
+            Columns = square ? Rows : cols;
             _matrix = new T[Rows, Columns];
             Input = new string[1];
         }
@@ -57,6 +58,18 @@ namespace AoC.Utils
         }
 
         private string GetValueFromInput(int row, int col) => SpaceSeparator ? Input[row].Split(" ")[col] : Input[row][col].ToString();
+
+        public string GetPrintable()
+        {
+            var res = new StringBuilder();
+            foreach (var row in GetAllRows())
+            {
+                foreach (var col in row)
+                    res.Append(col?.ToString());
+                res.AppendLine();
+            }
+            return res.ToString();
+        }
 
         public MatrixPoint<T> Get(int row, int col)
         {
@@ -99,6 +112,12 @@ namespace AoC.Utils
              for (int i = 0; i < Columns; i++)
                 yield return _matrix[row, i];
         }
+
+        public IEnumerable<MatrixPoint<T>> GetRowPositions(int row)
+        {
+             for (int i = 0; i < Columns; i++)
+                yield return new MatrixPoint<T>(row, i, _matrix[row, i]);
+        }
         public IEnumerable<IEnumerable<T>> GetAllRows()
         {
             for (int row = 0; row < Rows; row++)
@@ -114,6 +133,12 @@ namespace AoC.Utils
         {
              for (int i = 0; i < Rows; i++)
                 yield return _matrix[i, col];
+        }
+
+        public IEnumerable<MatrixPoint<T>> GetColumnPositions(int col)
+        {
+             for (int i = 0; i < Rows; i++)
+                yield return new MatrixPoint<T>(i, col, _matrix[i, col]);
         }
 
         public IEnumerable<Tuple<int, int>> NeighboursDef = new List<Tuple<int, int>>()
