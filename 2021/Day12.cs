@@ -20,37 +20,9 @@ namespace AoC2021
             _graph = new Graph<string>(nodes, edges);
         }
 
-        public int Star1() => FindPaths(_graph, "start", "end", IsAllowedStar1);
-        public int Star2() => FindPaths(_graph, "start", "end", IsAllowedStar2);
-        private delegate bool IsAllowedDelegate(List<string> visited, string node);
-
-        private int FindPaths(Graph<string> graph, string start, string end, IsAllowedDelegate IsAllowed )
-        {
-            var path = new List<string>(){start};
-            var queue = new Queue<List<string>>();
-            queue.Enqueue(path);
-            int paths = 0;
-            while (queue.Any())
-            {
-                var current = queue.Dequeue();
-                if(current.Last() == end)
-                {
-                    paths++;
-                    continue;
-                }
-                foreach (var node in graph.Nodes[current.Last()])
-                {
-                    if(IsAllowed(current, node.End))
-                    {
-                        var newPath = new List<string>(current);
-                        newPath.Add(node.End);
-                        queue.Enqueue(newPath);
-                    }
-                }
-            }
-            return paths;
-        }
-
+        public int Star1() => new GraphPathFinding<string>().BreadthFirst(_graph, "start", "end", IsAllowedStar1);
+        public int Star2() => new GraphPathFinding<string>().BreadthFirst(_graph, "start", "end", IsAllowedStar2);
+    
         private bool IsAllowedStar1(List<string> visited, string node)
         {
             if(!node.All(char.IsLower))
@@ -110,31 +82,8 @@ namespace AoC2021
                 }
 
         */
-        public class Edge<T>
-        {
-            public Edge(T start, T end)
-            {
-                Start = start;
-                End = end;
-            }
-            public T Start { get; set; }
-            public T End { get; set; }
-        }
+        
 
-        private class Graph<T> where T: notnull
-        {
-            public Dictionary<T, HashSet<Edge<T>>> Nodes {get; set;} = new Dictionary<T, HashSet<Edge<T>>>();
-            public Graph(IEnumerable<T> nodes, IEnumerable<Edge<T>> edges)
-            {
-                foreach (var node in nodes)
-                    Nodes[node] = new HashSet<Edge<T>>();
-
-                foreach (var edge in edges)
-                {
-                    Nodes[edge.Start].Add(edge);
-                    Nodes[edge.End].Add(new Edge<T>(edge.End, edge.Start));
-                }
-            }
-        }
+        
     }
 }

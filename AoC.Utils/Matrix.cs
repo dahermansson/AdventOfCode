@@ -234,5 +234,40 @@ namespace AoC.Utils
                 iCol +=dir.Item2;
             }
         }
+
+        public Matrix<T> ExpandToRigth(int fromColumn, int rows, int cols, Func<T, T> ValueModifier)
+        {
+            var newMatrix = new Matrix<T>(rows, Columns + cols, false);
+            Copy(this, ref newMatrix);
+
+            foreach (var p in GetAllPositions().Where(p => p.Column >= fromColumn))
+            {
+                if(p.Value != null)
+                    newMatrix.Grid[p.Row, p.Column+cols] = ValueModifier(p.Value);
+            }
+
+            return newMatrix;
+        }
+        public Matrix<T> ExpandDown(int fromRow, int rows, int cols, Func<T, T> ValueModifier)
+        {
+            var newMatrix = new Matrix<T>(Rows + rows, cols, false);
+            Copy(this, ref newMatrix);
+
+            foreach (var p in GetAllPositions().Where(p => p.Row >= fromRow))
+            {
+                if(p.Value != null)
+                    newMatrix.Grid[p.Row + rows, p.Column] = ValueModifier(p.Value);
+            }
+            return newMatrix;
+        }
+
+        private void Copy(Matrix<T> matrix, ref Matrix<T> newMatrix)
+        {
+            foreach (var m in matrix.GetAllPositions())
+            {
+                if(m.Value != null)
+                    newMatrix.Grid[m.Row, m.Column] = m.Value;
+            }
+        }
     }
 }

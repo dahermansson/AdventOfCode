@@ -5,57 +5,30 @@ using System.Threading.Tasks;
 
 namespace AoC.Utils
 {
-    public class MatrixPathFinding<T>
+    public class Graph<T> where T: notnull
     {
-        private Dictionary<MatrixPoint<T>, int> Cost{ get; set; } = new Dictionary<MatrixPoint<T>, int>();
-        private Dictionary<MatrixPoint<T>, MatrixPoint<T>> previous { get; set; } = new Dictionary<MatrixPoint<T>, MatrixPoint<T>>();
-        private HashSet<MatrixPoint<T>> Visited { get; set; } = new HashSet<MatrixPoint<T>>();
-        private HashSet<MatrixPoint<T>> UnVisited { get; set; } = new HashSet<MatrixPoint<T>>();
-        private Matrix<T> _graph { get; set; }
-        public MatrixPathFinding(Matrix<T> graph)
+        public Dictionary<T, HashSet<Edge<T>>> Nodes {get; set;} = new Dictionary<T, HashSet<Edge<T>>>();
+        public Graph(IEnumerable<T> nodes, IEnumerable<Edge<T>> edges)
         {
-            _graph = graph;
-            foreach (var node in _graph.GetAllPositions())
+            foreach (var node in nodes)
+                Nodes[node] = new HashSet<Edge<T>>();
+
+            foreach (var edge in edges)
             {
-                Cost.Add(node, 1000000);
-                UnVisited.Add(node);
+                Nodes[edge.Start].Add(edge);
+                Nodes[edge.End].Add(new Edge<T>(edge.End, edge.Start));
             }
         }
+    }
 
-        public void Dijkstra(MatrixPoint<T> start, MatrixPoint<T> end)
+    public class Edge<T>
+    {
+        public Edge(T start, T end)
         {
-            if(start == null)
-                throw new ArgumentNullException("start");
-            Cost[start] = 0;
-            
-            while (UnVisited.Any())
-            {
-                MatrixPoint<T> current = UnVisited.OrderBy(t => Cost[t]).First();
-                Visited.Add(current);
-                UnVisited.Remove(current);
-                foreach (var node in _graph.GetCrossNeighbours(current).Where(t => UnVisited.Contains(t)))
-                {
-                    var cost = Cost[current] + Convert.ToInt32(node.Value);
-                    if(cost < Cost[node])
-                    { 
-                        Cost[node] = cost;
-                        previous[node] = current;
-                    }
-                }
-            }
+            Start = start;
+            End = end;
         }
-
-        public IEnumerable<MatrixPoint<T>> GetShortestPath(MatrixPoint<T> start, MatrixPoint<T> end)
-        {
-            var current = end;
-            while (current != start)
-            {
-                yield return current;
-                current = previous[current];
-            }
-            yield return current;
-        }
-
-        public int GetCost(MatrixPoint<T> node) => Cost[node];
+        public T Start { get; set; }
+        public T End { get; set; }
     }
 }
