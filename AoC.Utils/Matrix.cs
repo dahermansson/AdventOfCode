@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace AoC.Utils
 {
+
     //X ->
     //0 1 2 3
     //1 Y
     //2 |
     //3 V
 
-    public class MatrixPoint<T>
+    public class MatrixPoint<T>: IEquatable<MatrixPoint<T>>
     {
         public int Row { get; set; }
         public int Column { get; set; }
@@ -24,6 +25,21 @@ namespace AoC.Utils
             Value = value;
         }
         public string PosToString { get {return $"{Row}:{Column}";}}
+
+        public bool Equals(MatrixPoint<T>? other)
+        {
+            if(other == null)
+                return false;
+            return Row == other.Row && Column == other.Column;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            hash = hash * 23 + Row.GetHashCode();
+            hash = hash * 23 + Column.GetHashCode();
+            return hash;
+        }
     }
 
     public class Matrix<T>
@@ -179,6 +195,12 @@ namespace AoC.Utils
         {
             var inMatrix = CrossNeighboursDef.Where(t => row + t.Item1 >= 0 && row + t.Item1 < _matrix.GetLength(0) && col + t.Item2 >= 0 && col + t.Item2 < _matrix.GetLength(1)).ToList();
             return inMatrix.Select(t => new MatrixPoint<T>(row + t.Item1, col + t.Item2, _matrix[row + t.Item1, col +t.Item2]));
+        }
+
+        public IEnumerable<MatrixPoint<T>> GetCrossNeighbours(MatrixPoint<T> node)
+        {
+            var inMatrix = CrossNeighboursDef.Where(t => node.Row + t.Item1 >= 0 && node.Row + t.Item1 < _matrix.GetLength(0) && node.Column + t.Item2 >= 0 && node.Column + t.Item2 < _matrix.GetLength(1)).ToList();
+            return inMatrix.Select(t => new MatrixPoint<T>(node.Row + t.Item1, node.Column + t.Item2, _matrix[node.Row + t.Item1, node.Column + t.Item2]));
         }
 
         public IEnumerable<MatrixPoint<T>> GetXNeighbours(int row, int col)

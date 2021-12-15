@@ -5,58 +5,57 @@ using System.Threading.Tasks;
 
 namespace AoC.Utils
 {
-
-/*
-    public record Node2
+    public class MatrixPathFinding<T>
     {
-        public string NodeId { get; set; }
-        public int Cost { get; set; }
-        public int VisitedPath {get; set;} = -1;
-        public Node2(string nodeId, int cost = 0)
+        private Dictionary<MatrixPoint<T>, int> Cost{ get; set; } = new Dictionary<MatrixPoint<T>, int>();
+        private Dictionary<MatrixPoint<T>, MatrixPoint<T>> previous { get; set; } = new Dictionary<MatrixPoint<T>, MatrixPoint<T>>();
+        private HashSet<MatrixPoint<T>> Visited { get; set; } = new HashSet<MatrixPoint<T>>();
+        private HashSet<MatrixPoint<T>> UnVisited { get; set; } = new HashSet<MatrixPoint<T>>();
+        private Matrix<T> _graph { get; set; }
+        public MatrixPathFinding(Matrix<T> graph)
         {
-            NodeId = nodeId;
-            Cost = cost;
-        }
-    }
-
-    public class Graph2
-    {
-        public Dictionary<Node, HashSet<Node>> Nodes;
-        public Graph2()
-        {
-            Nodes = new Dictionary<Node, HashSet<Node>>();
-        }
-
-        public void AddNode(Node node)
-        {
-            if(!Nodes.ContainsKey(node))
-                Nodes.Add(node, new HashSet<Node>());
-        }
-
-        public void AddEdges(Node node, IEnumerable<Node> edges)
-        {
-            foreach (var edge in edges)
+            _graph = graph;
+            foreach (var node in _graph.GetAllPositions())
             {
-                Nodes[node].Add(edge);
-                if(!Nodes.ContainsKey(edge))
-                    Nodes.Add(edge, new HashSet<Node>());
-                Nodes[edge].Add(node);            
+                Cost.Add(node, 1000000);
+                UnVisited.Add(node);
             }
         }
 
-        public IEnumerable<Node> GetChildren(Node node)
+        public void Dijkstra(MatrixPoint<T> start, MatrixPoint<T> end)
         {
-            foreach (var edge in Nodes[node])
-                yield return edge;            
+            if(start == null)
+                throw new ArgumentNullException("start");
+            Cost[start] = 0;
+            
+            while (UnVisited.Any())
+            {
+                MatrixPoint<T> current = UnVisited.OrderBy(t => Cost[t]).First();
+                Visited.Add(current);
+                UnVisited.Remove(current);
+                foreach (var node in _graph.GetCrossNeighbours(current).Where(t => UnVisited.Contains(t)))
+                {
+                    var cost = Cost[current] + Convert.ToInt32(node.Value);
+                    if(cost < Cost[node])
+                    { 
+                        Cost[node] = cost;
+                        previous[node] = current;
+                    }
+                }
+            }
         }
 
-        public Node GetNode(string nodeid)
+        public IEnumerable<MatrixPoint<T>> GetShortestPath(MatrixPoint<T> start, MatrixPoint<T> end)
         {
-            return Nodes.Single(t => t.Key == new Node(nodeid)).Key;
+            var current = end;
+            while (current != start)
+            {
+                yield return current;
+                current = previous[current];
+            }
+            yield return current;
         }
 
-
-
+        public int GetCost(MatrixPoint<T> node) => Cost[node];
     }
-    */
 }
