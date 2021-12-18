@@ -44,6 +44,30 @@ namespace AoC.Utils
             bits.CopyTo(res, 0);
             return res[0];
         }
+
+        public static int ToInt(this BitArray bits, int startIndex, int count)
+        {
+            return bits.GetRange(startIndex, count).ToIntRev();
+        }
+        public static BitArray GetRange(this BitArray bits, int startIndex, int count)
+        {
+            var temp = new BitArray(count);
+            int bitIndex = 0;
+            for (int i = startIndex; i < startIndex + count; i++)
+                temp[bitIndex++] = bits[i];
+            return temp;
+        }
+
+        public static BitArray Append(this BitArray bits, BitArray append)
+        {
+            var res = new BitArray(bits.Length + append.Length);
+            for (int i = 0; i < bits.Length; i++)
+                res[i] = bits[i];
+            for (int i = bits.Length; i < bits.Length + append.Length; i++)
+                res[i] = append[i - bits.Length];
+            return res;
+        }
+
         public static int ToIntRev(this BitArray bits)
         {
             var temp = new BitArray(bits.Length);
@@ -53,6 +77,26 @@ namespace AoC.Utils
             int[] res = new int[1];
             temp.CopyTo(res, 0);
             return res[0];
+        }
+        public static long ToInt64Rev(this BitArray bits)
+        {
+            var temp = new BitArray(bits.Length);
+            int index = 0;
+            for (int i = bits.Length -1; i > -1; i--)
+                temp[index++] = bits[i];
+            var bArray = new Byte[8];
+            temp.CopyTo(bArray, 0);
+            return BitConverter.ToInt64(bArray, 0);
+        }
+
+        public static string Print(this BitArray bits)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bits.Length; i++)
+            {
+                sb.Append(bits[i] ? 1 : 0);
+            }
+            return sb.ToString();
         }
 
         public static IEnumerable<IEnumerable<T>> Permutations<T>(this IEnumerable<T> source)
