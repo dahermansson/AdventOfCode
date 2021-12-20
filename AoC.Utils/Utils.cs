@@ -44,15 +44,13 @@ namespace AoC.Utils
             bits.CopyTo(res, 0);
             return res[0];
         }
+
         public static int ToIntRev(this BitArray bits)
         {
-            var temp = new BitArray(bits.Length);
-            int index = 0;
-            for (int i = bits.Length -1; i > -1; i--)
-                temp[index++] = bits[i];
-            int[] res = new int[1];
-            temp.CopyTo(res, 0);
-            return res[0];
+            int res = 0;
+            for (int i = bits.Length -1; i >= 0; i--)
+                res += res + Convert.ToInt32(bits[i]);
+            return res;
         }
 
         public static IEnumerable<IEnumerable<T>> Permutations<T>(this IEnumerable<T> source)

@@ -21,8 +21,9 @@ Days.Add(13, new Day13());
 Days.Add(14, new Day14());
 Days.Add(15, new Day15());
 
+
 int dayToRun = Days.Last().Key;
-dayToRun = 12;
+dayToRun = 3;
 var star1 = Days[dayToRun].Star1();
 var output = star1 == -1 ? Days[dayToRun].Output: star1.ToString(); 
 Console.WriteLine($"Star 1: { output}");
