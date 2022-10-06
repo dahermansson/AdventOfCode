@@ -1,8 +1,4 @@
-﻿
-using AoC.Utils;
-using AoC2021;
-
-Dictionary<int, IDay> Days = new Dictionary<int, IDay>();
+﻿Dictionary<int, IDay> Days = new Dictionary<int, IDay>();
 
 
 Days.Add(1, new Day1());
