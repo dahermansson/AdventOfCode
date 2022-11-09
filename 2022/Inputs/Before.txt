@@ -1,0 +1,1 @@
+The first puzzles will unlock on December 1st at midnight EST (UTC-5). See you then!
