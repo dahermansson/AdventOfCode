@@ -1,6 +1,7 @@
 ﻿Dictionary<int, IDay> Days = new Dictionary<int, IDay>();
 
 Days.Add(0, new Before());
+Days.Add(1, new Day1());
 
 
 
