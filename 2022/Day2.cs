@@ -16,8 +16,19 @@ public class Day2 : IDay
         _ when you == 'C' => 3,
         _ => 0
     };
-    public int Star2()
+    public int Star2() => InputReader.GetInputLines("Day2.txt").Select(t => PointsFromRound2(t[0], (t[2]))).Sum();
+
+    private int PointsFromRound2(char o, char r) => r switch
     {
-        throw new NotImplementedException();
-    }
+        'X' when o == 'A' => 3,
+        'X' when o == 'B' => 1,
+        'X' when o == 'C' => 2,
+        'Y' when o == 'A' => 4,
+        'Y' when o == 'B' => 5,
+        'Y' when o == 'C' => 6,
+        'Z' when o == 'A' => 8,
+        'Z' when o == 'B' => 9,
+        'Z' when o == 'C' => 7,
+        _ => 0
+    };
 }
