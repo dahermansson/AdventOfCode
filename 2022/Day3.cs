@@ -4,8 +4,8 @@ public class Day3 : IDay
 
     public int Star1()
     {
-        var splitItems = InputReader.GetInputLines("Day3.txt").Select(t => (a: t.Take(t.Length / 2), b: t.Skip(t.Length / 2))).ToArray();
-        var intersects = splitItems.Select(p => p.a.Intersect(p.b)).Where(t => t.Count() > 0).Select(t => t.Single()).ToArray();
+        var splitItems = InputReader.GetInputLines("Day3.txt").Select(t => (a: t.Take(t.Length / 2), b: t.Skip(t.Length / 2)));
+        var intersects = splitItems.Select(p => p.a.Intersect(p.b)).Where(t => t.Count() > 0).Select(t => t.Single());
         return intersects.Where(char.IsUpper).Select(t => t - 38).Sum() + intersects.Where(char.IsLower).Select(t => t - 96).Sum();
     }
 
