@@ -7,6 +7,7 @@ Days.Add(3, new Day3());
 Days.Add(4, new Day4());
 Days.Add(5, new Day5());
 Days.Add(6, new Day6());
+Days.Add(7, new Day7());
 
 
 
