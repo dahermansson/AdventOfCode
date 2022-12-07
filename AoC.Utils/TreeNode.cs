@@ -21,6 +21,15 @@ public class TreeNode<T> where T: notnull
     {
         nodes.Add(this);
         foreach (var child in Children)
+        {
             child.GetTreeNodes(ref nodes);
+        }
+    }
+
+    public IEnumerable<T> EnumerateNodes()
+    {
+        yield return this.Item;
+        foreach (var child in Children)
+            child.EnumerateNodes();
     }
 }
