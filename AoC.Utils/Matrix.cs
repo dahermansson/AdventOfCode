@@ -270,4 +270,12 @@ namespace AoC.Utils
             }
         }
     }
+
+    public static class MatrixDirection
+    {
+        public static Tuple<int, int> Up = new Tuple<int, int>(-1,0);
+        public static Tuple<int, int> Down = new Tuple<int, int>(1,0);
+        public static Tuple<int, int> Left = new Tuple<int, int>(0,-1);
+        public static Tuple<int, int> Rigth = new Tuple<int, int>(0,1);
+    }
 }
