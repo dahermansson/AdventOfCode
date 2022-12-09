@@ -31,8 +31,8 @@ public class Day8 : IDay
         return count;
     }
 
-    private int GetScenicScore(MatrixPoint<int> tree) => GetVisableTrees(trees.GetInDirection(MatrixDirection.Up, tree.Row, tree.Column), tree) * 
-        GetVisableTrees(trees.GetInDirection(MatrixDirection.Down, tree.Row, tree.Column), tree) *
-        GetVisableTrees(trees.GetInDirection(MatrixDirection.Left, tree.Row, tree.Column), tree) *
-        GetVisableTrees(trees.GetInDirection(MatrixDirection.Rigth, tree.Row, tree.Column), tree);
+    private int GetScenicScore(MatrixPoint<int> tree) => GetVisableTrees(trees.GetInDirection(MatrixDirectionValues.Up, tree.Row, tree.Column), tree) * 
+        GetVisableTrees(trees.GetInDirection(MatrixDirectionValues.Down, tree.Row, tree.Column), tree) *
+        GetVisableTrees(trees.GetInDirection(MatrixDirectionValues.Left, tree.Row, tree.Column), tree) *
+        GetVisableTrees(trees.GetInDirection(MatrixDirectionValues.Rigth, tree.Row, tree.Column), tree);
 }

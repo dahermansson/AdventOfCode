@@ -40,6 +40,45 @@ namespace AoC.Utils
             hash = hash * 23 + Column.GetHashCode();
             return hash;
         }
+
+        public void Move(MatrixDirection direction)
+        {
+            switch (direction)
+            {
+                case MatrixDirection.Up:
+                    DoMove(MatrixDirectionValues.Up);
+                    break;
+                case MatrixDirection.Down:
+                    DoMove(MatrixDirectionValues.Down);
+                    break;
+                case MatrixDirection.Left:
+                    DoMove(MatrixDirectionValues.Left);
+                    break;
+                case MatrixDirection.Rigth:
+                    DoMove(MatrixDirectionValues.Rigth);
+                    break;
+                case MatrixDirection.UpLeft:
+                    DoMove(MatrixDirectionValues.UpLeft);
+                    break;
+                case MatrixDirection.UpRigth:
+                    DoMove(MatrixDirectionValues.UpRigth);
+                    break;
+                case MatrixDirection.DownLeft:
+                    DoMove(MatrixDirectionValues.DownLeft);
+                    break;
+                case MatrixDirection.DownRigth:
+                    DoMove(MatrixDirectionValues.DownRigth);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void DoMove(Tuple<int, int> move)
+        {
+            this.Row += move.Item1;
+            this.Column += move.Item2;
+        }
     }
 
     public class Matrix<T>
@@ -271,11 +310,45 @@ namespace AoC.Utils
         }
     }
 
-    public static class MatrixDirection
+    public enum MatrixDirection
+    {
+        None,
+        Up,
+        UpRigth,
+        UpLeft, 
+        Down,
+        DownRigth,
+        DownLeft,
+        Left,
+        Rigth,
+    }
+
+    public static class MatrixDirectionValues
     {
         public static Tuple<int, int> Up = new Tuple<int, int>(-1,0);
+        public static Tuple<int, int> UpRigth = new Tuple<int, int>(-1,1);
+        public static Tuple<int, int> UpLeft = new Tuple<int, int>(-1,-1);
         public static Tuple<int, int> Down = new Tuple<int, int>(1,0);
+        public static Tuple<int, int> DownRigth = new Tuple<int, int>(1,1);
+        public static Tuple<int, int> DownLeft = new Tuple<int, int>(1,-1);
         public static Tuple<int, int> Left = new Tuple<int, int>(0,-1);
         public static Tuple<int, int> Rigth = new Tuple<int, int>(0,1);
+
+        public static MatrixDirection LetterToDirection(char c)
+    {
+        switch (c)
+        {
+            case 'D': 
+                return MatrixDirection.Down;
+            case 'U':
+                return MatrixDirection.Up;
+            case 'L':
+                return MatrixDirection.Left;
+            case 'R':
+                return MatrixDirection.Rigth;
+            default:
+                return MatrixDirection.Up;
+        }
+    }
     }
 }
