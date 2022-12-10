@@ -116,7 +116,7 @@ namespace AoC.Utils
 
         public string GetPrintable()
         {
-            var res = new StringBuilder();
+            var res = new StringBuilder($"Matrix: {Environment.NewLine}");
             foreach (var row in GetAllRows())
             {
                 foreach (var col in row)
