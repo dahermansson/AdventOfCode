@@ -11,6 +11,7 @@ Days.Add(7, new Day7());
 Days.Add(8, new Day8());
 Days.Add(9, new Day9());
 Days.Add(10, new Day10());
+Days.Add(11, new Day11());
 
 
 int dayToRun = Days.Last().Key;
