@@ -19,7 +19,7 @@ namespace AoC.Utils
                 Cost.Add(node, 100000);
         }
 
-        public void Dijkstra(MatrixPoint<T> start, MatrixPoint<T> end, Func<MatrixPoint<T>, MatrixPoint<T>, int> costFunc)
+        public void Dijkstra(MatrixPoint<T> start, Func<int, MatrixPoint<T>, int> costFunc)
         {
             if(start == null)
                 throw new ArgumentNullException("start");
@@ -29,14 +29,10 @@ namespace AoC.Utils
             while (Candidates.Any())
             {
                 MatrixPoint<T> current = Candidates.ElementAt(0).Value;
-                if(current == end)
-                    break;
-                Visited.Add(current);
                 Candidates.RemoveAt(Candidates.IndexOfValue(current));
-                foreach (var node in _graph.GetCrossNeighbours(current).Where(t => (Convert.ToInt32(t.Value) <= Convert.ToInt32(current.Value) || Convert.ToInt32(t.Value) - 1 == Convert.ToInt32(current.Value) ) && !Visited.Contains(t)).ToArray())
+                foreach (var node in _graph.GetCrossNeighbours(current).Where(t => !Visited.Contains(t) && (Convert.ToInt32(t.Value) <= Convert.ToInt32(current.Value) || Convert.ToInt32(t.Value) - 1 == Convert.ToInt32(current.Value))))
                 {
-                    //var cost = costFunc(current, node);
-                    var cost = Cost[current] + Convert.ToInt32(node.Value);
+                    var cost = costFunc(Cost[current], node);
                     if(cost < Cost[node])
                     { 
                         Cost[node] = cost;
@@ -44,20 +40,22 @@ namespace AoC.Utils
                         Candidates.Add(cost, node);
                     }
                 }
+                Visited.Add(current);
             }
         }
 
         public IEnumerable<MatrixPoint<T>> GetShortestPath(MatrixPoint<T> start, MatrixPoint<T> end)
         {
+            var res = new List<MatrixPoint<T>>();
             var current = end;
             do 
             {
-                yield return current;
-                if(Previous.ContainsKey(current))
-                    current = Previous[current];
-                else
-                    break;
-            } while (current != start);
+                res.Add(current);
+                if(!Previous.ContainsKey(current))
+                    return new List<MatrixPoint<T>>();
+                current = Previous[current];
+            } while (!current.Equals(start));
+            return res;
         }
         public int GetCost(MatrixPoint<T> node) => Cost[node];
     }
