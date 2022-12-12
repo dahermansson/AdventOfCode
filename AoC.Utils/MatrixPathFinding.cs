@@ -9,17 +9,17 @@ namespace AoC.Utils
     {
         private Dictionary<MatrixPoint<T>, int> Cost{ get; set; } = new Dictionary<MatrixPoint<T>, int>();
         private SortedList<int, MatrixPoint<T>> Candidates { get; set; } = new SortedList<int, MatrixPoint<T>>(new DuplicateKeyComparer());
-        private Dictionary<MatrixPoint<T>, MatrixPoint<T>> previous { get; set; } = new Dictionary<MatrixPoint<T>, MatrixPoint<T>>();
+        private Dictionary<MatrixPoint<T>, MatrixPoint<T>> Previous { get; set; } = new Dictionary<MatrixPoint<T>, MatrixPoint<T>>();
         private HashSet<MatrixPoint<T>> Visited { get; set; } = new HashSet<MatrixPoint<T>>();
         private Matrix<T> _graph { get; set; }
         public MatrixPathFinding(Matrix<T> graph)
         {
             _graph = graph;
             foreach (var node in _graph.GetAllPositions())
-                Cost.Add(node, 1000000);
+                Cost.Add(node, 100000);
         }
 
-        public void Dijkstra(MatrixPoint<T> start, MatrixPoint<T> end)
+        public void Dijkstra(MatrixPoint<T> start, MatrixPoint<T> end, Func<MatrixPoint<T>, MatrixPoint<T>, int> costFunc)
         {
             if(start == null)
                 throw new ArgumentNullException("start");
@@ -33,13 +33,14 @@ namespace AoC.Utils
                     break;
                 Visited.Add(current);
                 Candidates.RemoveAt(Candidates.IndexOfValue(current));
-                foreach (var node in _graph.GetCrossNeighbours(current).Where(t => !Visited.Contains(t)).ToArray())
+                foreach (var node in _graph.GetCrossNeighbours(current).Where(t => (Convert.ToInt32(t.Value) <= Convert.ToInt32(current.Value) || Convert.ToInt32(t.Value) - 1 == Convert.ToInt32(current.Value) ) && !Visited.Contains(t)).ToArray())
                 {
+                    //var cost = costFunc(current, node);
                     var cost = Cost[current] + Convert.ToInt32(node.Value);
                     if(cost < Cost[node])
                     { 
                         Cost[node] = cost;
-                        previous[node] = current;
+                        Previous[node] = current;
                         Candidates.Add(cost, node);
                     }
                 }
@@ -49,14 +50,15 @@ namespace AoC.Utils
         public IEnumerable<MatrixPoint<T>> GetShortestPath(MatrixPoint<T> start, MatrixPoint<T> end)
         {
             var current = end;
-            while (current != start)
+            do 
             {
                 yield return current;
-                current = previous[current];
-            }
-            yield return current;
+                if(Previous.ContainsKey(current))
+                    current = Previous[current];
+                else
+                    break;
+            } while (current != start);
         }
-
         public int GetCost(MatrixPoint<T> node) => Cost[node];
     }
 
