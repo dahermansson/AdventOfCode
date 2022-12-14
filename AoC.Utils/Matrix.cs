@@ -114,8 +114,19 @@ namespace AoC.Utils
 
         private string GetValueFromInput(int row, int col) => SpaceSeparator ? Input[row].Split(" ")[col] : Input[row][col].ToString();
 
+        public string GetPrintable(int iRow, int iCol, int rows, int cols)
+        {   
+            var res = new StringBuilder($"Matrix: {Environment.NewLine}");
+            foreach (var row in GetAllRows().ToArray())
+            {
+                foreach (var col in row)
+                    res.Append(col?.ToString());
+                res.AppendLine();
+            }
+            return res.ToString();
+        }
         public string GetPrintable()
-        {
+        {    
             var res = new StringBuilder($"Matrix: {Environment.NewLine}");
             foreach (var row in GetAllRows())
             {
@@ -153,6 +164,26 @@ namespace AoC.Utils
         public void Update(int row, int col, Func<T, T> update)
         {
             _matrix[row, col] = update(_matrix[row, col]);
+        }
+
+        public void UpdateLine(int rowStart, int colStart, int rowEnd, int colEnd, Func<T, T> update)
+        {
+            if(rowStart == rowEnd)
+            {
+                if (colStart > colEnd)
+                    for (int i = colEnd; i < colStart; i++)
+                        _matrix[rowStart, i] = update(_matrix[rowStart, i]);
+                    else
+                        for (int i = colStart; i < colEnd; i++)
+                            _matrix[rowStart, i] = update(_matrix[rowStart, i]);
+            }
+            else
+                if(rowStart > rowEnd)
+                    for (int i = rowEnd; i < rowStart; i++)
+                        _matrix[i, colStart] = update(_matrix[i, colStart]);
+                else
+                    for (int i = rowStart; i < rowEnd; i++)
+                        _matrix[i, colStart] = update(_matrix[i, colStart]);
         }
 
         public IEnumerable<MatrixPoint<T>> GetAllPositions()
