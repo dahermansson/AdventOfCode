@@ -171,18 +171,18 @@ namespace AoC.Utils
             if(rowStart == rowEnd)
             {
                 if (colStart > colEnd)
-                    for (int i = colEnd; i < colStart; i++)
+                    for (int i = colStart; i >= colEnd; i--)
                         _matrix[rowStart, i] = update(_matrix[rowStart, i]);
                     else
-                        for (int i = colStart; i < colEnd; i++)
+                        for (int i = colStart; i <= colEnd; i++)
                             _matrix[rowStart, i] = update(_matrix[rowStart, i]);
             }
             else
                 if(rowStart > rowEnd)
-                    for (int i = rowEnd; i < rowStart; i++)
+                    for (int i = rowStart; i >= rowEnd; i--)
                         _matrix[i, colStart] = update(_matrix[i, colStart]);
                 else
-                    for (int i = rowStart; i < rowEnd; i++)
+                    for (int i = rowStart; i <= rowEnd; i++)
                         _matrix[i, colStart] = update(_matrix[i, colStart]);
         }
 
@@ -313,7 +313,7 @@ namespace AoC.Utils
             foreach (var p in GetAllPositions().Where(p => p.Column >= fromColumn))
             {
                 if(p.Value != null)
-                    newMatrix.Grid[p.Row, p.Column+cols] = ValueModifier(p.Value);
+                    newMatrix.Grid[p.Row, p.Column+cols] = ValueModifier(newMatrix.Grid[p.Row, p.Column+cols]);
             }
 
             return newMatrix;
@@ -326,7 +326,7 @@ namespace AoC.Utils
             foreach (var p in GetAllPositions().Where(p => p.Row >= fromRow))
             {
                 if(p.Value != null)
-                    newMatrix.Grid[p.Row + rows, p.Column] = ValueModifier(p.Value);
+                    newMatrix.Grid[p.Row + rows, p.Column] = ValueModifier(newMatrix.Grid[p.Row + rows, p.Column]);
             }
             return newMatrix;
         }
