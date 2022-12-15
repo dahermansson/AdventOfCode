@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AoC.Utils
 {
@@ -116,5 +117,7 @@ namespace AoC.Utils
                     foreach (var p in permutations(source.Take(i).Concat(source.Skip(i + 1))))
                         yield return source.Skip(i).Take(1).Concat(p);
         }
+
+        public static int ExtraxtInteger(this string s) => int.Parse(Regex.Match(s, @"\d+").Value);
     }
 }

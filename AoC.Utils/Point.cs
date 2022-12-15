@@ -14,5 +14,12 @@ namespace AoC.Utils
             X = int.Parse(input.Split(separator)[0]);
             Y = int.Parse(input.Split(separator)[1]);
         }
+        
+        //aoeaoeu x=12, y=123
+        public Point(string input)
+        {
+            X = input.Split(',')[0].ExtraxtInteger();
+            Y = input.Split(',')[1].ExtraxtInteger();
+        }
     }
 }
