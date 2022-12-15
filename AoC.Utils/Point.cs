@@ -9,6 +9,11 @@ namespace AoC.Utils
     {
         public int X { get; set; }
         public int Y { get; set; }
+        public Point(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
         public Point(string input, string separator = ",")
         {
             X = int.Parse(input.Split(separator)[0]);

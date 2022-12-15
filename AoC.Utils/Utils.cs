@@ -14,6 +14,7 @@ namespace AoC.Utils
         public static readonly string NL = "\r\n";
         public static readonly string DNL = $"{NL}{NL}";
         public static int ManhattanDistance(int x, int y) => Math.Abs(x) + Math.Abs(y);
+        public static int ManhattanDistance(Point x, Point y) => Math.Abs(x.X - y.X) + Math.Abs(x.Y - y.Y);
         public static long LCM(long a, long b) => (a / GCD(a, b)) * b;
         public static long GCD(long a, long b)
         {
@@ -118,6 +119,6 @@ namespace AoC.Utils
                         yield return source.Skip(i).Take(1).Concat(p);
         }
 
-        public static int ExtraxtInteger(this string s) => int.Parse(Regex.Match(s, @"\d+").Value);
+        public static int ExtraxtInteger(this string s) => int.Parse(Regex.Match(s, @"-?\d+").Value);
     }
 }
