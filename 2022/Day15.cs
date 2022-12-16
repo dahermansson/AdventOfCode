@@ -43,9 +43,10 @@ public class Day15 : IDay
         int maxRows = 4000001;
         Stopwatch sw = new Stopwatch();
         sw.Start();
-        for (int y = 0; y < maxRows; y++)
+        Parallel.For(0, maxRows, y => 
+        //for (int y = maxRows; y > 0; --y)
         {
-            var coversLine = input.Where(t => Utils.ManhattanDistance(t.Key, t.Value) >= Math.Abs(t.Key.Y - y))
+            var coversLine = input.Where(t => Utils.ManhattanDistance(t.Key, t.Value) > Math.Abs(t.Key.Y - y))
                 .Select(t => (t, Utils.ManhattanDistance(t.Key, t.Value))).ToList();
             
             var ranges = new List<(int, int)>();
@@ -74,10 +75,10 @@ public class Day15 : IDay
                     Int64 res = ((Int64)endValue + 1) * (Int64)4000000 + (Int64)y;
                     _ouput = res.ToString();
                     Console.WriteLine(sw.Elapsed);
-                    return -1;
+                    break;
                 }   
             }
-        }
+        });
         return -1;
     }
 }
