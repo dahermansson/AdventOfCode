@@ -34,5 +34,33 @@ namespace AoC.Utils
             }
             return paths;
         }
+
+         public int DepthFirst (Graph<T> graph, T start, T end, IsAllowedDelegate IsAllowed )
+        {
+            var path = new List<T>(){start};
+            var stack = new Stack<List<T>>();
+            stack.Push(path);
+            int paths = 0;
+            while (stack.Any())
+            {
+                var current = stack.Pop();
+                if(current.Last().Equals(end))
+                {
+                    paths++;
+                    continue;
+                }
+                foreach (var node in graph.Nodes[current.Last()])
+                {
+                    if(IsAllowed(current, node.End))
+                    {
+                        var newPath = new List<T>(current);
+                        newPath.Add(node.End);
+                        stack.Push(newPath);
+                    }
+                }
+            }
+            return paths;
+        }
     }
+    
 }
