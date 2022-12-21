@@ -17,10 +17,10 @@ Days.Add(13, new Day13());
 Days.Add(14, new Day14());
 Days.Add(15, new Day15());
 Days.Add(16, new Day16());
-//Days.Add(17, new Day17());
+Days.Add(17, new Day17());
 Days.Add(20, new Day20());
 
-int dayToRun = Days.Last().Key;
+int dayToRun = 17;//Days.Last().Key;
 var star1 = Days[dayToRun].Star1();
 var output = star1 == -1 ? Days[dayToRun].Output: star1.ToString(); 
 Console.WriteLine($"Star 1: { output}");

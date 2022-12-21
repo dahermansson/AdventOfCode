@@ -8,7 +8,7 @@ namespace AoC.Utils
     public class Graph<T> where T: notnull
     {
         public Dictionary<T, HashSet<Edge<T>>> Nodes {get; set;} = new Dictionary<T, HashSet<Edge<T>>>();
-        public Graph(IEnumerable<T> nodes, IEnumerable<Edge<T>> edges)
+        public Graph(IEnumerable<T> nodes, IEnumerable<Edge<T>> edges, bool doubleDirected = true)
         {
             foreach (var node in nodes)
                 Nodes[node] = new HashSet<Edge<T>>();
@@ -16,7 +16,8 @@ namespace AoC.Utils
             foreach (var edge in edges)
             {
                 Nodes[edge.Start].Add(edge);
-                Nodes[edge.End].Add(new Edge<T>(edge.End, edge.Start));
+                if(doubleDirected)
+                    Nodes[edge.End].Add(new Edge<T>(edge.End, edge.Start));
             }
         }
     }

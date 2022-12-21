@@ -14,9 +14,6 @@ public class Day16 : IDay
     
         var current = valvesAndNeigbours["AA"].Valve;
 
-
-       // return valves.Where(t => t.Flowrate > 0).Sum(t => t.Flowrate * 30);
-
         return MaxFlow(current, "", 30, valvesAndNeigbours, "");
     }
 
