@@ -125,6 +125,10 @@ namespace AoC.Utils
             }
             return res.ToString();
         }
+
+        public MatrixPoint<T> FindFirst(T item) => GetAllPositions().FirstOrDefault(t => t.Value.Equals(item));
+        
+
         public string GetPrintable()
         {    
             var res = new StringBuilder($"Matrix: {Environment.NewLine}");
@@ -140,6 +144,10 @@ namespace AoC.Utils
         public MatrixPoint<T> Get(int row, int col)
         {
             return new MatrixPoint<T>(row, col, _matrix[row, col]);
+        }
+        public MatrixPoint<T> Get(MatrixPoint<T> point)
+        {
+            return new MatrixPoint<T>(point.Row, point.Column, _matrix[point.Row, point.Column]);
         }
         public IEnumerable<T> GetAllValues()
         {
@@ -293,6 +301,34 @@ namespace AoC.Utils
                 iCol +=dir.Item2;
             }
         }
+
+        public IEnumerable<MatrixPoint<T>> GetStepsInDirectionWrap(MatrixDirection direction, MatrixPoint<T> startPoint, int steps, Func<T, bool> predicate, Func<T, bool> CountsInStep)
+        {
+            var dir = MatrixDirectionValues.GetMatrixDirectionValues(direction);
+            var iRow = startPoint.Row + dir.Item1;
+            var iCol = startPoint.Column + dir.Item2;
+            int stepsTaken = 0;
+            while(stepsTaken < steps)
+            {
+                if(iRow >= Rows)
+                    iRow = 0;
+                if(iRow <= -1)
+                    iRow = Rows -1;
+                if(iCol >= Columns)
+                    iCol = 0;
+                if(iCol <= -1)
+                    iCol =Columns - 1;
+                var mxPoint = Get(iRow, iCol);
+                if(mxPoint.Value != null && predicate(mxPoint.Value))
+                    break;
+                yield return mxPoint;
+                if(CountsInStep(mxPoint.Value!))
+                    stepsTaken++;
+                iRow += dir.Item1;
+                iCol += dir.Item2;
+            }
+        }
+        
         public IEnumerable<MatrixPoint<T>> GetInDirection(Tuple<int, int> dir, int row, int col)
         {
             var iRow = row + dir.Item1;
@@ -365,21 +401,31 @@ namespace AoC.Utils
         public static Tuple<int, int> Left = new Tuple<int, int>(0,-1);
         public static Tuple<int, int> Rigth = new Tuple<int, int>(0,1);
 
-        public static MatrixDirection LetterToDirection(char c)
-    {
-        switch (c)
+        public static Tuple<int, int> GetMatrixDirectionValues(MatrixDirection m) => m switch
         {
-            case 'D': 
-                return MatrixDirection.Down;
-            case 'U':
-                return MatrixDirection.Up;
-            case 'L':
-                return MatrixDirection.Left;
-            case 'R':
-                return MatrixDirection.Rigth;
-            default:
-                return MatrixDirection.Up;
+            MatrixDirection.Down => MatrixDirectionValues.Down,
+            MatrixDirection.Up => MatrixDirectionValues.Up,
+            MatrixDirection.Left => MatrixDirectionValues.Left,
+            MatrixDirection.Rigth => MatrixDirectionValues.Rigth,
+            _ => MatrixDirectionValues.Up
+        };
+            
+
+        public static MatrixDirection LetterToDirection(char c)
+        {
+            switch (c)
+            {
+                case 'D': 
+                    return MatrixDirection.Down;
+                case 'U':
+                    return MatrixDirection.Up;
+                case 'L':
+                    return MatrixDirection.Left;
+                case 'R':
+                    return MatrixDirection.Rigth;
+                default:
+                    return MatrixDirection.Up;
+            }
         }
-    }
     }
 }
