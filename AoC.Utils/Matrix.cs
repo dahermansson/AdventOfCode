@@ -125,6 +125,10 @@ namespace AoC.Utils
             }
             return res.ToString();
         }
+
+        public MatrixPoint<T> FindFirst(T item) => GetAllPositions().FirstOrDefault(t => t.Value.Equals(item));
+        
+
         public string GetPrintable()
         {    
             var res = new StringBuilder($"Matrix: {Environment.NewLine}");
@@ -303,6 +307,15 @@ namespace AoC.Utils
                 iRow+=dir.Item1;
                 iCol +=dir.Item2;
             }
+        }
+
+        public MatrixPoint<T> WalkWrap(MatrixPoint<T> start, int steps, MatrixDirection direction, Func<MatrixPoint<T>, bool> haltIf)
+        {
+            for (int i = 0; i < steps; i++)
+            {
+                //var next = start.DoMove(direction)
+            }
+            return null;
         }
 
         public Matrix<T> ExpandToRigth(int fromColumn, int rows, int cols, Func<T, T> ValueModifier)
