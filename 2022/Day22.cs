@@ -21,9 +21,21 @@ public class Day22 : IDay
         return 1000 * (current.Row + 1) + 4 * (current.Column + 1) + FacingScore(currentDirection);
     }
 
+    private record Face
+    {
+        public int Index { get; set; }
+        public Point MinBound { get; set; }
+        public Point MaxBound { get; set; }
+    }
+
     public int Star2()
     {
-        throw new NotImplementedException();
+        var Faces = new Dictionary<int, Face>{
+            {0, new Face{Index = 0, MinBound = new Point(0, 50), MaxBound =  new Point(50, 99)}}, //Up
+            {1, new Face{Index = 0, MinBound = new Point(50, 50), MaxBound =  new Point(99, 99)}}, // Front
+            {2, new Face{Index = 0, MinBound = new Point(50, 50), MaxBound =  new Point(99, 99)}}, //
+        };
+        return -1;
     }
 
     private int FacingScore(MatrixDirection m) => m switch
