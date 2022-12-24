@@ -23,6 +23,7 @@ Days.Add(19, new Day19());
 Days.Add(20, new Day20());
 Days.Add(21, new Day21());
 Days.Add(22, new Day22());
+Days.Add(23, new Day23());
 
 int dayToRun = Days.Last().Key;
 var star1 = Days[dayToRun].Star1();
