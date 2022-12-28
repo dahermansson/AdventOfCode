@@ -2,14 +2,10 @@ using System.Collections;
 
 public class Day17 : IDay
 {
-    public static readonly int GAMEWIDTH = 7; //Zerobased game 
-    public static SortedList<int, BitArray> RestingRocks = new SortedList<int, BitArray>()
-    {
-        {0, new BitArray(GAMEWIDTH, true)}
-    };
+    public static readonly int GAMEWIDTH = 7; //Zerobased cave 
+    public static SortedList<int, BitArray> RestingRocks = new SortedList<int, BitArray>() { { 0, new BitArray(GAMEWIDTH, true) } };
     public string Output => _output;
     private string _output = "";
-    //private string Moves = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>";
     private string Moves = InputReader.GetInput("Day17.txt");
     private int MoveXIndex = 0;
     private int ShapeIndex = 0;
@@ -51,7 +47,6 @@ public class Day17 : IDay
     public void PrintGameBoard(Shape? shape = null)
     {
         var temp = new Dictionary<int, BitArray>();
-
         if (shape != null)
         {
             foreach (var b in shape.Block.OrderByDescending(t => t.Y))
@@ -82,7 +77,6 @@ public class Day17 : IDay
         Console.WriteLine();
     }
 
-
     public int DropRocks(int numbersOfRockToDropp)
     {
         var blocksToFall = numbersOfRockToDropp;
@@ -103,16 +97,11 @@ public class Day17 : IDay
                     RestingRocks[b.Y] = new BitArray(GAMEWIDTH, false);
                 RestingRocks[b.Y][b.X] = true;
             }
-            //PrintGameBoard();
         }
         return StackHeigth;
     }
 
-
-    public int Star1()
-    {
-        return DropRocks(2022);
-    }
+    public int Star1() => DropRocks(2022);
 
     public int Star2()
     {
@@ -128,29 +117,29 @@ public class Day17 : IDay
     }
     public (int stackHeigth, int blocksDropped, int blocksInCycle, int cycleHeigth) FindCycle()
     {
-        RestingRocks = new SortedList<int, BitArray>() {{0, new BitArray(GAMEWIDTH, true)}};
+        RestingRocks = new SortedList<int, BitArray>() { { 0, new BitArray(GAMEWIDTH, true) } };
         ShapeIndex = 0;
         MoveXIndex = 0;
         Dictionary<(string cavestate, int move, int shape), (int rocksInCycle, int cycleHeigth, int countHits)> states = new();
         int blocksDropped = 0;
         var nextMove = 0;
         var nextShape = 0;
-        (string cavestate, int move, int shape) state = GetState(MoveXIndex % Moves.Length, ShapeIndex % Shapes.Length);;
+        (string cavestate, int move, int shape) state = GetState(MoveXIndex % Moves.Length, ShapeIndex % Shapes.Length); ;
         while (blocksDropped < 100000) //Cycle must be before this!!!
         {
             state = state = GetState(MoveXIndex % Moves.Length, ShapeIndex % Shapes.Length);
-            if(states.ContainsKey(state))
+            if (states.ContainsKey(state))
             {
                 var prevState = states[state];
                 var cycleHeigth = StackHeigth - prevState.cycleHeigth;
                 var blocksDroppedInCycle = blocksDropped - prevState.rocksInCycle;
-                if(prevState.countHits == 2) //Find same cycle two times to be sure it's i repeating cycle
+                if (prevState.countHits == 2) //Find same cycle two times to be sure it's i repeating cycle
                     break;
-                states[state] = new (blocksDroppedInCycle, cycleHeigth, prevState.countHits + 1);
+                states[state] = new(blocksDroppedInCycle, cycleHeigth, prevState.countHits + 1);
             }
             else
                 states.Add(state, (blocksDropped, StackHeigth, 1));
-                
+
             var keep = RestingRocks.Max(t => t.Key) - 1000;
             var min = RestingRocks.Min(t => t.Key);
             for (int i = keep; i >= min; i--)
@@ -187,7 +176,7 @@ public class Day17 : IDay
             for (int i = 0; i < 7; i++)
                 s[i] = r.Value[i].ToString();
             temp.Add(string.Join("", s));
-        }   
+        }
         return (string.Join(";", temp), move, shape);
     }
     public class Shape
