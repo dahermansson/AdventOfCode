@@ -8,9 +8,9 @@ public class Day17 : IDay
         {0, new BitArray(GAMEWIDTH, true)}
     };
     public string Output => _output;
-    private string _output ="";
-    private string Moves = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>";
-    //private string Moves = InputReader.GetInput("Day17.txt");
+    private string _output = "";
+    //private string Moves = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>";
+    private string Moves = InputReader.GetInput("Day17.txt");
     private int MoveXIndex = 0;
     private int ShapeIndex = 0;
     private int StackHeigth => RestingRocks.Keys.Max();
@@ -116,29 +116,46 @@ public class Day17 : IDay
 
     public int Star2()
     {
-        RestingRocks = new SortedList<int, BitArray>()
-            {
-                {0, new BitArray(GAMEWIDTH, true)}
-            };
+        var cycle = FindCycle(); //Done two cycles
+        RestingRocks.Clear();
+        RestingRocks.Add(0, new BitArray(GAMEWIDTH, true));
         ShapeIndex = 0;
         MoveXIndex = 0;
-        var blocksToFall = 2022;
-        HashSet<(string, int, int)> states = new();
-        int block = 0;
+        long cyclesToDo = (1000000000000 - cycle.blocksDropped) / cycle.blocksInCycle;
+        long remaningBlockToDrop = (1000000000000 - cycle.blocksDropped) % cycle.blocksInCycle;
+        _output = ((cycle.cycleHeigth * cyclesToDo) + DropRocks(cycle.blocksDropped + (int)remaningBlockToDrop)).ToString();
+        return -1;
+    }
+    public (int stackHeigth, int blocksDropped, int blocksInCycle, int cycleHeigth) FindCycle()
+    {
+        RestingRocks = new SortedList<int, BitArray>() {{0, new BitArray(GAMEWIDTH, true)}};
+        ShapeIndex = 0;
+        MoveXIndex = 0;
+        Dictionary<(string cavestate, int move, int shape), (int rocksInCycle, int cycleHeigth, int countHits)> states = new();
+        int blocksDropped = 0;
         var nextMove = 0;
         var nextShape = 0;
-        while (states.Add(GetState(MoveXIndex % Moves.Length, ShapeIndex % Shapes.Length)))
-        //while (states.Add("0,0,0,0,0,0,0"))
+        (string cavestate, int move, int shape) state = GetState(MoveXIndex % Moves.Length, ShapeIndex % Shapes.Length);;
+        while (blocksDropped < 100000) //Cycle must be before this!!!
         {
-            var keep = RestingRocks.Max(t => t.Key) - 150;
+            state = state = GetState(MoveXIndex % Moves.Length, ShapeIndex % Shapes.Length);
+            if(states.ContainsKey(state))
+            {
+                var prevState = states[state];
+                var cycleHeigth = StackHeigth - prevState.cycleHeigth;
+                var blocksDroppedInCycle = blocksDropped - prevState.rocksInCycle;
+                if(prevState.countHits == 2) //Find same cycle two times to be sure it's i repeating cycle
+                    break;
+                states[state] = new (blocksDroppedInCycle, cycleHeigth, prevState.countHits + 1);
+            }
+            else
+                states.Add(state, (blocksDropped, StackHeigth, 1));
+                
+            var keep = RestingRocks.Max(t => t.Key) - 1000;
             var min = RestingRocks.Min(t => t.Key);
             for (int i = keep; i >= min; i--)
-            {
                 RestingRocks.Remove(i);
-            }
 
-            if(block % 1000 == 0)
-                Console.WriteLine($"blocks: {block}");
             nextShape = GetNextShapeIndex();
             var shape = Shapes[nextShape].Spawn(StackHeigth);
             do
@@ -155,37 +172,24 @@ public class Day17 : IDay
                     RestingRocks[b.Y] = new BitArray(GAMEWIDTH, false);
                 RestingRocks[b.Y][b.X] = true;
             }
-            block++;
-
-            //PrintGameBoard();
+            blocksDropped++;
         }
-        Console.WriteLine(block);
-
-        var numbersOfRockInCycle = block;
-        var towersHeigthInCycle = StackHeigth;
-        
-        long totolBlocksToDo = 1000000000000;
-        long cyclesToDo = totolBlocksToDo / numbersOfRockInCycle;
-
-        int remoningBlockToDo = (int)(totolBlocksToDo - (numbersOfRockInCycle * cyclesToDo));
-        
-        var towerHeigtFirstCycleAndRest = DropRocks(remoningBlockToDo);
-
-        _output = ((StackHeigth - towersHeigthInCycle) + (towersHeigthInCycle * cyclesToDo)).ToString();
-        return -1;
+        return (StackHeigth, blocksDropped, states[state].rocksInCycle, states[state].cycleHeigth);
     }
 
-    private (string, int, int) GetState(int move, int shape)
+    private (string cavestate, int move, int shape) GetState(int move, int shape)
     {
-        var tempPeak = new int[7];
-        var orderdRestingRocks = RestingRocks.Reverse().ToList();
-        for (int i = 0; i < 7; i++)
-            tempPeak[i] = orderdRestingRocks.First(t => t.Value[i]).Key;
-        var columnPeak = new int[7];
-        int min = tempPeak.Min();
-        return (string.Join(',', tempPeak.Select(t => t-min)), move, shape);
+        List<string> temp = new List<string>();
+        var block = RestingRocks.Reverse().Take(20).ToArray();
+        foreach (var r in block)
+        {
+            var s = new string[7];
+            for (int i = 0; i < 7; i++)
+                s[i] = r.Value[i].ToString();
+            temp.Add(string.Join("", s));
+        }   
+        return (string.Join(";", temp), move, shape);
     }
-
     public class Shape
     {
         public Shape(Point[] block)
@@ -236,7 +240,4 @@ public class Day17 : IDay
             return true;
         }
     }
-
 }
-
-
